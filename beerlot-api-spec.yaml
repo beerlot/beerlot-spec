@@ -125,56 +125,12 @@ paths:
       tags:
       - beer
       summary: Get all beers with full search
-      operationId: getBeersWithSearch
+      operationId: findBeersBySearch
       parameters:
-      - name: keyword
-        in: query
-        description: Search keyword
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-        example: 골든 에일
-      - name: categories
-        in: query
-        description: Categories
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: array
-          example:
-          - 골든 에일
-          - 아이피에이
-          items:
-            type: string
-      - name: countries
-        in: query
-        description: Countries
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: array
-          example:
-          - KO
-          - US
-          items:
-            type: string
-      - name: volumes
-        in: query
-        description: Beer Alcohol Volume
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: array
-          example:
-          - 4
-          - 8
-          items:
-            type: integer
+      - $ref: '#/components/parameters/keyword'
+      - $ref: '#/components/parameters/categories'
+      - $ref: '#/components/parameters/countries'
+      - $ref: '#/components/parameters/volumes'
       responses:
         "200":
           description: OK
@@ -246,7 +202,7 @@ paths:
       tags:
       - beer
       summary: Get one beer
-      operationId: getBeer
+      operationId: findBeerById
       parameters:
       - name: beerId
         in: path
@@ -529,7 +485,7 @@ paths:
                     name: 아메리칸 IPA
                     description: This is American IPA.
                 items:
-                  $ref: '#/components/schemas/FindCategoryResDto'
+                  $ref: '#/components/schemas/FindCategorySupResDto'
         "500":
           description: Internal server error. Unexpected error.
       security: []
@@ -556,7 +512,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindCategoryResDto'
+                $ref: '#/components/schemas/FindCategorySupResDto'
               examples:
                 FindCategoryResDto_Example:
                   $ref: '#/components/examples/FindCategoryResDto_Example'
@@ -687,40 +643,29 @@ components:
         $ref: '#/components/examples/FindBeerResDto_Example'
       allOf:
       - $ref: '#/components/schemas/BaseResDto'
-      x-class-extra-annotations:
-      - '@lombok.Getter'
-      - '@lombok.R'
     FindCountryResDto:
       type: object
       properties:
         code:
           type: string
-    FindCategoryResDto:
-      required:
-      - category
-      - description
-      type: object
-      properties:
-        description:
-          type: string
-        category:
-          $ref: '#/components/schemas/FindCategoryResDto'
-      allOf:
-      - $ref: '#/components/schemas/BaseResDto'
-      x-class-extra-annotations:
-      - '@lombok.Getter'
     FindCategorySupResDto:
       required:
+      - name_ko
+      - name_en
+      - description
       - parent
       type: object
       properties:
+        name_ko:
+          type: string
+        name_en:
+          type: string
+        description:
+          type: string
         parent:
-          $ref: '#/components/schemas/FindCategoryResDto'
+          $ref: '#/components/schemas/FindCategorySupResDto'
       allOf:
       - $ref: '#/components/schemas/BaseResDto'
-      - $ref: '#/components/schemas/FindCategoryResDto'
-      x-class-extra-annotations:
-      - '@lombok.Getter'
     FindTagResDto:
       required:
       - name
@@ -732,8 +677,6 @@ components:
           type: string
       allOf:
       - $ref: '#/components/schemas/BaseResDto'
-      x-class-extra-annotations:
-      - '@lombok.Getter'
     ReviewResDto:
       required:
       - rate
@@ -780,17 +723,18 @@ components:
     categories:
       name: categories
       in: query
-      description: Categories
+      description: Category IDs
       required: false
       style: form
       explode: true
       schema:
         type: array
         example:
-        - 골든 에일
-        - 아이피에이
+        - 1
+        - 2
         items:
-          type: string
+          type: integer
+          format: int64
     countries:
       name: countries
       in: query
@@ -905,7 +849,7 @@ components:
       value:
         id: 1
         name: 아메리칸 블론드 에일
-        description: This is Amerian Blonde Ale.
+        description: This is American Blonde Ale.
     FindCountryResDto_Example:
       value:
         code: US
