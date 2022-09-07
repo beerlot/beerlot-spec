@@ -1,54 +1,62 @@
 openapi: 3.0.0
-
-servers:
-  # Added by API Auto Mocking Plugin
-  # Added by API Auto Mocking Plugin
-  # Added by API Auto Mocking Plugin
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/beerlot-contact/beerlot-api-spec/1.0.0
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/beerlot.contact/beerlot-api-spec/1.0.0
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/beerlot.contact/beerlot-api/1.0.0
-
 info:
-  version: "1.0.0"
   title: BeerLot API
-  description: >-
-    BeerLot API
-
+  description: BeerLot API
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/beerlot-contact/beerlot-api-spec/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://virtserver.swaggerhub.com/beerlot.contact/beerlot-api-spec/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://virtserver.swaggerhub.com/beerlot.contact/beerlot-api/1.0.0
+  description: SwaggerHub API Auto Mocking
 security:
-  - password:
-      - read
-      - write
-
+- password:
+  - read
+  - write
 tags:
-  - name: member
-    description: member management
-  - name: beer
-    description: beer management
-  - name: beer review
-    description: beer review management
-  - name: beer favorite
-    description: beer favorite management
-  - name: beer category
-    description: beer category management
-  - name: beer tag
-    description: beer tag management
-
+- name: member
+  description: member management
+- name: beer
+  description: beer management
+- name: beer review
+  description: beer review management
+- name: beer favorite
+  description: beer favorite management
+- name: beer category
+  description: beer category management
+- name: beer tag
+  description: beer tag management
 paths:
-  ####################
-  # MEMBER API
-  ####################
   /members:
+    get:
+      tags:
+      - member
+      summary: Check if given username already exists
+      operationId: checkUsernameDuplicated
+      parameters:
+      - name: username
+        in: query
+        description: username
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 비어러버
+      responses:
+        "200":
+          description: Ok to use the username.
+        "409":
+          description: Conflict. The username already exists.
+        "500":
+          description: Internal server error. Unexpected error.
     post:
       tags:
-        - member
+      - member
       summary: Signup
       operationId: createMember
       requestBody:
-        required: true
         description: Member Signup Form
         content:
           application/json:
@@ -57,19 +65,18 @@ paths:
             examples:
               MemberReq_Example:
                 $ref: '#/components/examples/MemberReq_Example'
+        required: true
       responses:
-        '201':
-          $ref: '#/components/responses/Created'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
+        "201":
+          description: Created.
+        "500":
+          description: Internal server error. Unexpected error.
     patch:
       tags:
-        - member
+      - member
       summary: Update Member Profile
       operationId: updateMember
       requestBody:
-        required: true
         description: Member Profile Update Form
         content:
           application/json:
@@ -78,8 +85,9 @@ paths:
             examples:
               MemberUpdateReq_Example:
                 $ref: '#/components/examples/MemberUpdateReq_Example'
+        required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -88,40 +96,18 @@ paths:
               examples:
                 MemberRes_Example:
                   $ref: '#/components/examples/MemberRes_Example'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-    get:
-      summary: Check if given username already exists
-      operationId: checkUsernameDuplicated
-      tags:
-        - member
-      parameters:
-        - in: query
-          name: username
-          description: username
-          schema:
-            type: string
-          example: '비어러버'
-          required: true
-      responses:
-        '200':
-          description: Ok to use the username.
-        '409':
-          description: Conflict. The username already exists.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "500":
+          description: Internal server error. Unexpected error.
   /members/me:
     get:
       tags:
-        - member
+      - member
       summary: Get Member Profile
       operationId: getMember
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -130,102 +116,149 @@ paths:
               examples:
                 MemberRes_Example:
                   $ref: '#/components/examples/MemberRes_Example'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  ####################
-  # BEER API
-  ####################
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "500":
+          description: Internal server error. Unexpected error.
   /beers:
-    parameters:
-      - $ref: '#/components/parameters/keyword'
-      - $ref: '#/components/parameters/categories'
-      - $ref: '#/components/parameters/countries'
-      - $ref: '#/components/parameters/volumes'
     get:
       tags:
-        - beer
+      - beer
       summary: Get all beers with full search
       operationId: getBeersWithSearch
-      security: []
+      parameters:
+      - name: keyword
+        in: query
+        description: Search keyword
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 골든 에일
+      - name: categories
+        in: query
+        description: Categories
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          example:
+          - 골든 에일
+          - 아이피에이
+          items:
+            type: string
+      - name: countries
+        in: query
+        description: Countries
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          example:
+          - KO
+          - US
+          items:
+            type: string
+      - name: volumes
+        in: query
+        description: Beer Alcohol Volume
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          example:
+          - 4
+          - 8
+          items:
+            type: integer
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
+                example:
+                - id: 1
+                  name_ko: 빅 웨이브
+                  name_en: Bigwave
+                  description: 미묘한 과일 향과 섬세한 홉 향이 나는 가벼운 골든 에일입니다. 부드럽고 마시기 좋은 상쾌한
+                    에일입니다. 가볍게 볶은 허니 몰트는 이 맥주의 황금빛 색조에 기여하고 우리의 특별한 홉 블렌드로 균형을 이루는
+                    약간의 단맛을 제공합니다.
+                  origin:
+                    code: US
+                    name_ko: 미국
+                    name_en: The United States
+                  volume: 4.4
+                  image_url: "returned_from_server: <base_url>/<file_name>"
+                  category:
+                    id: 1
+                    name_ko: 아메리칸 블론드 에일
+                    name_en: American Blonde Ale
+                    description: 아메리칸 블론드 에일은...
+                    parent:
+                      id: 10
+                      name_ko: 에일
+                      name_en: Ale
+                      description: 에일은...
+                  tags:
+                  - id: 1
+                    name_ko: 시트라
+                    name_en: Citra
+                    description: 시트라 홉은...
+                - id: 2
+                  name_ko: 구스 아일랜드 IPA
+                  name_en: Goose Island IPA
+                  description: 영국에서 인도로 배송된 에일을 긴 여정 동안 고유한 맛을 보존하기 위해 홉을 많이 사용했던
+                    때를 회상합니다. 결과는 과일 향이 나는 홉 애호가의 꿈이며 드라이한 몰트 미디움과 긴 홉 피니시가 특징입니다.
+                  origin:
+                    code: US
+                    name_ko: 미국
+                    name_en: The United States
+                  volume: 5.9
+                  image_url: "returned_from_server: <base_url>/<file_name>"
+                  category:
+                    id: 2
+                    name_ko: 잉글리쉬 아이피에이
+                    name_en: English IPA
+                    description: 잉글리쉬 아이피에ㅇ는...
+                    parent:
+                      id: 20
+                      name_ko: 아이피에이
+                      name_en: IPA
+                      description: 아이피에이는...
+                  tags:
+                  - id: 1
+                    name_ko: 시트라
+                    name_en: Citra
+                    description: 시트라 홉은...
                 items:
                   $ref: '#/components/schemas/FindBeerRes'
-                example:
-                  - id: 1
-                    name_ko: '빅 웨이브'
-                    name_en: 'Bigwave'
-                    description: '미묘한 과일 향과 섬세한 홉 향이 나는 가벼운 골든 에일입니다. 부드럽고 마시기 좋은 상쾌한 에일입니다. 가볍게 볶은 허니 몰트는 이 맥주의 황금빛 색조에 기여하고 우리의 특별한 홉 블렌드로 균형을 이루는 약간의 단맛을 제공합니다.'
-                    origin:
-                      code: 'US'
-                      name_ko: '미국'
-                      name_en: 'The United States'
-                    volume: 4.4
-                    image_url: 'returned_from_server: <base_url>/<file_name>'
-                    category:
-                      id: 1
-                      name_ko: '아메리칸 블론드 에일'
-                      name_en: 'American Blonde Ale'
-                      description: '아메리칸 블론드 에일은...'
-                      parent:
-                        id: 10
-                        name_ko: '에일'
-                        name_en: 'Ale'
-                        description: '에일은...'
-                    tags: 
-                      - id: 1
-                        name_ko: '시트라'
-                        name_en: 'Citra'
-                        description: '시트라 홉은...'
-                    
-                  - id: 2
-                    name_ko: '구스 아일랜드 IPA'
-                    name_en: 'Goose Island IPA'
-                    description: '영국에서 인도로 배송된 에일을 긴 여정 동안 고유한 맛을 보존하기 위해 홉을 많이 사용했던 때를 회상합니다. 결과는 과일 향이 나는 홉 애호가의 꿈이며 드라이한 몰트 미디움과 긴 홉 피니시가 특징입니다.'
-                    origin:
-                      code: 'US'
-                      name_ko: '미국'
-                      name_en: 'The United States'
-                    volume: 5.9
-                    image_url: 'returned_from_server: <base_url>/<file_name>'
-                    category:
-                      id: 2
-                      name_ko: '잉글리쉬 아이피에이'
-                      name_en: 'English IPA'
-                      description: '잉글리쉬 아이피에ㅇ는...'
-                      parent:
-                        id: 20
-                        name_ko: '아이피에이'
-                        name_en: 'IPA'
-                        description: '아이피에이는...'
-                    tags: 
-                      - id: 1
-                        name_ko: '시트라'
-                        name_en: 'Citra'
-                        description: '시트라 홉은...'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-
+        "500":
+          description: Internal server error. Unexpected error.
+      security: []
   /beers/{beerId}:
-    parameters:
-      - $ref: '#/components/parameters/beerId'
     get:
       tags:
-        - beer
+      - beer
       summary: Get one beer
       operationId: getBeer
-      security: []
+      parameters:
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "1"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -234,80 +267,63 @@ paths:
               examples:
                 FindBeerRes_Example:
                   $ref: '#/components/examples/FindBeerRes_Example'
-              
-        '404':
+        "404":
           description: Not found. The beer with specified ID was not found.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  ####################
-  # REVIEW API
-  ####################
+        "500":
+          description: Internal server error. Unexpected error.
+      security: []
   /reviews/{beerId}:
-    post:
-      tags:
-        - beer review
-      summary: Create a new review
-      operationId: createReview
-      parameters:
-        - $ref: '#/components/parameters/beerId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReviewCreateReq'
-            examples:
-              ReviewCreateReq_Example:
-                $ref: '#/components/examples/ReviewCreateReq_Example'
-      responses:
-        '201':
-          description: Review created.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          description: Not found. The beer with specified ID was not found.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
     get:
       tags:
-        - beer review
-      parameters:
-        - $ref: '#/components/parameters/beerId'
+      - beer review
       summary: Get all reviews specified by beer ID
       operationId: getReviews
+      parameters:
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "1"
       responses:
-        '200':
+        "200":
           description: Ok.
           content:
             application/json:
               schema:
                 type: array
+                example:
+                - id: 1
+                  content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
+                  rate: 5.0
+                - id: 2
+                  content: 생각한것보다 좀 맹맹했어요ㅜㅜ
+                  rate: 3.5
                 items:
                   $ref: '#/components/schemas/ReviewRes'
-                example:
-                  - id: 1
-                    content: '이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야'
-                    rate: 5.0
-                  - id: 2
-                    content:  '생각한것보다 좀 맹맹했어요ㅜㅜ'
-                    rate: 3.5
-
-        '404':
+        "404":
           description: Not found. The beer with specified ID was not found.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /reviews/{reviewId}:
-    patch:
+        "500":
+          description: Internal server error. Unexpected error.
+    post:
       tags:
-        - beer review
-      summary: Update the review
-      operationId: updateReview
+      - beer review
+      summary: Create a new review
+      operationId: createReview
       parameters:
-        - $ref: '#/components/parameters/reviewId'
-      requestBody:
+      - name: beerId
+        in: path
+        description: beer id
         required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "1"
+      requestBody:
         content:
           application/json:
             schema:
@@ -315,8 +331,96 @@ paths:
             examples:
               ReviewCreateReq_Example:
                 $ref: '#/components/examples/ReviewCreateReq_Example'
+        required: true
       responses:
-        '200':
+        "201":
+          description: Review created.
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "404":
+          description: Not found. The beer with specified ID was not found.
+        "500":
+          description: Internal server error. Unexpected error.
+  /reviews/{reviewId}:
+    get:
+      tags:
+      - beer review
+      summary: Get one review with specified ID
+      operationId: getReview
+      parameters:
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "1"
+      responses:
+        "200":
+          description: Ok. Get review.
+          content:
+            application/json:
+              examples:
+                ReviewRes_Example:
+                  $ref: '#/components/examples/ReviewRes_Example'
+        "404":
+          description: Not found. The review with specified ID was not found.
+        "500":
+          description: Internal server error. Unexpected error.
+    delete:
+      tags:
+      - beer review
+      summary: Delete the review
+      operationId: deleteReview
+      parameters:
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "1"
+      responses:
+        "204":
+          description: Review deleted.
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "403":
+          description: Forbidden. Inproper authorization.
+        "404":
+          description: Not found. The review with specified ID was not found.
+        "500":
+          description: Internal server error. Unexpected error.
+    patch:
+      tags:
+      - beer review
+      summary: Update the review
+      operationId: updateReview
+      parameters:
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "1"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCreateReq'
+            examples:
+              ReviewCreateReq_Example:
+                $ref: '#/components/examples/ReviewCreateReq_Example'
+        required: true
+      responses:
+        "200":
           description: Ok. Review updated.
           content:
             application/json:
@@ -325,144 +429,120 @@ paths:
               examples:
                 ReviewRes_Example:
                   $ref: '#/components/examples/ReviewRes_Example'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "403":
+          description: Forbidden. Inproper authorization.
+        "404":
           description: Not found. The review with specified ID was not found.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-    get:
-      tags:
-        - beer review
-      parameters:
-        - $ref: '#/components/parameters/reviewId'
-      summary: Get one review with specified ID
-      operationId: getReview
-      responses:
-        '200':
-          description: Ok. Get review.
-          content:
-            application/json:
-              examples:
-                ReviewRes_Example:
-                  $ref: '#/components/examples/ReviewRes_Example'
-        '404':
-          description: Not found. The review with specified ID was not found.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-    delete:
-      tags:
-        - beer review
-      parameters:
-        - $ref: '#/components/parameters/reviewId'
-      summary: Delete the review
-      operationId: deleteReview
-      responses:
-        '204':
-          description: Review deleted.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          description: Not found. The review with specified ID was not found.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  ####################
-  # FAVORIATE API
-  ####################
+        "500":
+          description: Internal server error. Unexpected error.
   /beers/{beerId}/favorites:
     post:
       tags:
-        - beer favorite
-      parameters:
-        - $ref: '#/components/parameters/beerId'
+      - beer favorite
       summary: Favorite the beer with specified id
       operationId: createFavorite
+      parameters:
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "1"
       responses:
-        '200':
+        "200":
           description: Already favorited.
-        '201':
+        "201":
           description: Favorite created.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "404":
           description: Not found. The beer with specified ID was not found.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-          
+        "500":
+          description: Internal server error. Unexpected error.
     delete:
       tags:
-        - beer favorite
-      parameters:
-        - $ref: '#/components/parameters/beerId'
+      - beer favorite
       summary: Unfavorite the beer with specified id
       operationId: deleteFavorite
+      parameters:
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "1"
       responses:
-        '200':
+        "200":
           description: No favorite found.
-        '204':
+        "204":
           description: Unfavorite succeeded.
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "404":
           description: Not found. The beer with specified ID was not found.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-        
-  ####################
-  # CATEGORY API
-  ####################
+        "500":
+          description: Internal server error. Unexpected error.
   /categories:
     get:
       tags:
-        - beer category
+      - beer category
       summary: Get all categories
       operationId: getCategories
-      security: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
+                example:
+                - id: 1
+                  name: 에일
+                  description: This is Ale.
+                  children:
+                  - id: 10
+                    name: 아메리칸 블론드 에일
+                    description: This is American Blonde Ale.
+                - id: 2
+                  name: IPA
+                  children:
+                  - id: 17
+                    name: 잉글리쉬 IPA
+                    description: This is English IPA.
+                  - id: 21
+                    name: 아메리칸 IPA
+                    description: This is American IPA.
                 items:
                   $ref: '#/components/schemas/FindCategoryRes'
-                example:
-                  - id: 1
-                    name: '에일'
-                    description: 'This is Ale.'
-                    children:
-                    - id: 10
-                      name: '아메리칸 블론드 에일'
-                      description: 'This is American Blonde Ale.'
-                  - id: 2
-                    name: 'IPA'
-                    children:
-                    - id: 17
-                      name: '잉글리쉬 IPA'
-                      description: 'This is English IPA.'
-                    - id: 21
-                      name: '아메리칸 IPA'
-                      description: 'This is American IPA.'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
+        "500":
+          description: Internal server error. Unexpected error.
+      security: []
   /categories/{categoryId}:
     get:
       tags:
-        - beer category
+      - beer category
       summary: Get one category found by category id
       operationId: getCategory
       parameters:
-        - $ref: '#/components/parameters/categoryId'
-      security: []
+      - name: categoryId
+        in: path
+        description: beer category id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+        example: "1"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -471,51 +551,44 @@ paths:
               examples:
                 FindCategoryRes_Example:
                   $ref: '#/components/examples/FindCategoryRes_Example'
-        '404':
+        "404":
           description: Not found. The category with specified ID was not found.
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  ####################
-  # TAG API
-  ####################
+        "500":
+          description: Internal server error. Unexpected error.
+      security: []
   /tags:
     get:
       tags:
-        - beer tag
+      - beer tag
       summary: Get all beer tags
       operationId: getTags
-      security: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
+                example:
+                - id: 1
+                  name_ko: 사이다
+                  name_en: Cider
+                - id: 2
+                  name_ko: 생강
+                  name_en: Ginger
                 items:
                   $ref: '#/components/schemas/FindTagRes'
-                example:
-                  - id: 1
-                    name_ko: '사이다'
-                    name_en: 'Cider'
-                  - id: 2
-                    name_ko: '생강'
-                    name_en: 'Ginger'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  
+        "500":
+          description: Internal server error. Unexpected error.
+      security: []
 components:
   schemas:
-    ####################
-    # REQUEST DTO
-    ####################
     MemberCreateReq:
-      description: Member Signup Form
-      type: object
       required:
-        - email
-        - password
-        - username
+      - email
+      - password
+      - username
+      type: object
       properties:
         email:
           type: string
@@ -523,50 +596,44 @@ components:
           type: string
         username:
           type: string
-
+      description: Member Signup Form
     MemberUpdateReq:
       type: object
-      description: Member Profile Update Form
       properties:
         username:
           type: string
-          example: 'beerlover'
-
+          example: beerlover
+      description: Member Profile Update Form
     ReviewCreateReq:
-      type: object
       required:
-        - content
-        - rate
+      - content
+      - rate
+      type: object
       properties:
         content:
           type: string
         rate:
+          multipleOf: 0.5
           type: number
           format: float
-          multipleOf: 0.5
       x-class-extra-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Getter'
-
-    ####################
-    # RESPONSE DTO
-    ####################
+      - '@lombok.AllArgsConstructor'
+      - '@lombok.Getter'
     BaseRes:
-      type: object
       required:
-        - id
+      - id
+      type: object
       properties:
         id:
           type: integer
           format: int64
-
     MemberRes:
-      type: object
       required:
-        - email
-        - password
-        - username
-        - email_verified
+      - email
+      - email_verified
+      - password
+      - username
+      type: object
       properties:
         email:
           type: string
@@ -580,16 +647,15 @@ components:
           type: boolean
           default: false
       allOf:
-        - $ref: '#/components/schemas/BaseRes'
-
+      - $ref: '#/components/schemas/BaseRes'
     FindBeerRes:
-      type: object
       required:
-        - name_en
-        - name_ko
-        - description
-        - origin
-        - volume
+      - description
+      - name_en
+      - name_ko
+      - origin
+      - volume
+      type: object
       properties:
         name_en:
           type: string
@@ -600,9 +666,9 @@ components:
         origin:
           $ref: '#/components/schemas/CountryRes'
         volume:
+          minimum: 0.0
           type: integer
           format: float
-          minimum: 0.0
         image_url:
           type: string
         category:
@@ -611,65 +677,60 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FindTagRes'
-      allOf:
-        - $ref: '#/components/schemas/BaseRes'
       example:
         $ref: '#/components/examples/FindBeerRes_Example'
+      allOf:
+      - $ref: '#/components/schemas/BaseRes'
       x-class-extra-annotations:
-        - '@lombok.Getter'
-
+      - '@lombok.Getter'
     CountryRes:
       type: object
       properties:
         code:
           type: string
-
     FindCategoryRes:
-      type: object
       required:
-        - description
-        - category
+      - category
+      - description
+      type: object
       properties:
         description:
           type: string
         category:
           $ref: '#/components/schemas/FindCategoryRes'
       allOf:
-        - $ref: '#/components/schemas/BaseRes'
+      - $ref: '#/components/schemas/BaseRes'
       x-class-extra-annotations:
-        - '@lombok.Getter'
-    
+      - '@lombok.Getter'
     FindCategorySupRes:
-      type: object
       required:
-        - parent
+      - parent
+      type: object
       properties:
         parent:
           $ref: '#/components/schemas/FindCategoryRes'
       allOf:
-        - $ref: '#/components/schemas/BaseRes'
-        - $ref: '#/components/schemas/FindCategoryRes'
+      - $ref: '#/components/schemas/BaseRes'
+      - $ref: '#/components/schemas/FindCategoryRes'
       x-class-extra-annotations:
-        - '@lombok.Getter'
-
+      - '@lombok.Getter'
     FindTagRes:
-      type: object
       required:
-        - name
+      - name
+      type: object
       properties:
         name_ko:
           type: string
         name_en:
           type: string
       allOf:
-        - $ref: '#/components/schemas/BaseRes'
+      - $ref: '#/components/schemas/BaseRes'
       x-class-extra-annotations:
-        - '@lombok.Getter'
-    
+      - '@lombok.Getter'
     ReviewRes:
-      type: object
       required:
-        - rate
+      - rate
+      type: object
       properties:
         content:
           type: string
@@ -677,101 +738,7 @@ components:
           type: integer
           format: float
       allOf:
-        - $ref: '#/components/schemas/BaseRes'
-
-  securitySchemes:
-    password:
-      type: oauth2
-      flows:
-        password:
-          tokenUrl: 'http://example.com/oauth/token'
-          scopes:
-            write: allows modifying resources
-            read: allows reading resources
-
- 
-  ####################
-  # PARAMETERS
-  ####################
-  parameters:
-    memberId:
-      in: path
-      name: memberId
-      description: Member ID
-      example: 1
-      required: true
-      schema:
-        type: integer
-        format: int64
-
-    keyword:
-      in: query
-      name: keyword
-      description: Search keyword
-      example: '골든 에일'
-      schema:
-        type: string
-
-    categories:
-      in: query
-      name: categories
-      description: Categories
-      schema:
-        type: array
-        items:
-          type: string
-        example: ['골든 에일', '아이피에이']
-    
-    countries:
-      in: query
-      name: countries
-      description: Countries
-      schema:
-        type: array
-        items:
-          type: string
-        example: ['KO', 'US']
-    
-    volumes:
-      in: query
-      name: volumes
-      description: Beer Alcohol Volume
-      schema:
-        type: array
-        items:
-          type: integer
-        example: [4, 8]
-
-    beerId:
-      in: path
-      name: beerId
-      description: beer id
-      example: '1'
-      required: true
-      schema:
-        type: string
-
-    categoryId:
-      in: path
-      name: categoryId
-      description: beer category id
-      example: '1'
-      required: true
-      schema:
-        type: string
-
-    reviewId:
-      in: path
-      name: reviewId
-      description: beer review id
-      example: '1'
-      required: true
-      schema:
-        type: string
-
-  ####################
-  # RESPONSES
-  ####################
+      - $ref: '#/components/schemas/BaseRes'
   responses:
     Created:
       description: Created.
@@ -781,81 +748,173 @@ components:
       description: Forbidden. Inproper authorization.
     InternalServerError:
       description: Internal server error. Unexpected error.
-
-  ####################
-  # EXAMPLES
-  ####################
+  parameters:
+    memberId:
+      name: memberId
+      in: path
+      description: Member ID
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    keyword:
+      name: keyword
+      in: query
+      description: Search keyword
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+      example: 골든 에일
+    categories:
+      name: categories
+      in: query
+      description: Categories
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        example:
+        - 골든 에일
+        - 아이피에이
+        items:
+          type: string
+    countries:
+      name: countries
+      in: query
+      description: Countries
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        example:
+        - KO
+        - US
+        items:
+          type: string
+    volumes:
+      name: volumes
+      in: query
+      description: Beer Alcohol Volume
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        example:
+        - 4
+        - 8
+        items:
+          type: integer
+    beerId:
+      name: beerId
+      in: path
+      description: beer id
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+      example: "1"
+    categoryId:
+      name: categoryId
+      in: path
+      description: beer category id
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+      example: "1"
+    reviewId:
+      name: reviewId
+      in: path
+      description: beer review id
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+      example: "1"
   examples:
     MemberReq_Example:
       value:
-        email: 'beer.lover@email.com'
-        password: 'PWbeer10ver*!'
-        username: '비어러버'
-
+        email: beer.lover@email.com
+        password: PWbeer10ver*!
+        username: 비어러버
     MemberUpdateReq_Example:
       value:
-        username: '퇴근후한캔'
-
+        username: 퇴근후한캔
     ReviewCreateReq_Example:
       value:
-        content: '이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야'
+        content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
-
     MemberRes_Example:
       value:
         id: 1
-        email: 'beer.lover@email.com'
-        password: 'beer10ver!@#'
-        username: '비어러버'
-        image_url: 'returned_from_server: <base_url>/<file_name>'
+        email: beer.lover@email.com
+        password: beer10ver!@#
+        username: 비어러버
+        image_url: "returned_from_server: <base_url>/<file_name>"
         email_verified: true
-
     FindBeerRes_Example:
       value:
         id: 1
-        name_ko: '빅 웨이브'
-        name_en: 'Bigwave'
-        description: '미묘한 과일 향과 섬세한 홉 향이 나는 가벼운 골든 에일입니다. 부드럽고 마시기 좋은 상쾌한 에일입니다. 가볍게 볶은 허니 몰트는 이 맥주의 황금빛 색조에 기여하고 우리의 특별한 홉 블렌드로 균형을 이루는 약간의 단맛을 제공합니다.'
+        name_ko: 빅 웨이브
+        name_en: Bigwave
+        description: 미묘한 과일 향과 섬세한 홉 향이 나는 가벼운 골든 에일입니다. 부드럽고 마시기 좋은 상쾌한 에일입니다. 가볍게
+          볶은 허니 몰트는 이 맥주의 황금빛 색조에 기여하고 우리의 특별한 홉 블렌드로 균형을 이루는 약간의 단맛을 제공합니다.
         origin:
-          code: 'US'
-          name_ko: '미국'
-          name_en: 'The United States'
+          code: US
+          name_ko: 미국
+          name_en: The United States
         volume: 4.4
-        image_url: 'returned_from_server: <base_url>/<file_name>'
+        image_url: "returned_from_server: <base_url>/<file_name>"
         category:
           id: 1
-          name_ko: '아메리칸 블론드 에일'
-          name_en: 'American Blonde Ale'
-          description: '아메리칸 블론드 에일은...'
+          name_ko: 아메리칸 블론드 에일
+          name_en: American Blonde Ale
+          description: 아메리칸 블론드 에일은...
           parent:
             id: 10
-            name_ko: '에일'
-            name_en: 'Ale'
-            description: '에일은...'
-        tags: 
-          - id: 1
-            name_ko: '시트라'
-            name_en: 'Citra'
-            description: '시트라 홉은...'
-
+            name_ko: 에일
+            name_en: Ale
+            description: 에일은...
+        tags:
+        - id: 1
+          name_ko: 시트라
+          name_en: Citra
+          description: 시트라 홉은...
     FindCategoryRes_Example:
       value:
         id: 1
-        name: '아메리칸 블론드 에일'
-        description: 'This is Amerian Blonde Ale.'
-
+        name: 아메리칸 블론드 에일
+        description: This is Amerian Blonde Ale.
     CountryRes_Example:
       value:
-        code: 'US'
-
+        code: US
     FindTagRes_Example:
       value:
         id: 1
-        name_ko: '사이다'
-        name_en: 'Cider'
-
+        name_ko: 사이다
+        name_en: Cider
     ReviewRes_Example:
       value:
         id: 1
-        content: '이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야'
+        content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
+  securitySchemes:
+    password:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: http://example.com/oauth/token
+          scopes:
+            write: allows modifying resources
+            read: allows reading resources
