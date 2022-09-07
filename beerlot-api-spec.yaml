@@ -670,10 +670,10 @@ components:
         description:
           type: string
         origin:
-          $ref: '#/components/schemas/CountryResDto'
+          $ref: '#/components/schemas/FindCountryResDto'
         volume:
           minimum: 0.0
-          type: integer
+          type: number
           format: float
         image_url:
           type: string
@@ -689,7 +689,8 @@ components:
       - $ref: '#/components/schemas/BaseResDto'
       x-class-extra-annotations:
       - '@lombok.Getter'
-    CountryResDto:
+      - '@lombok.R'
+    FindCountryResDto:
       type: object
       properties:
         code:
@@ -905,7 +906,7 @@ components:
         id: 1
         name: 아메리칸 블론드 에일
         description: This is Amerian Blonde Ale.
-    CountryResDto_Example:
+    FindCountryResDto_Example:
       value:
         code: US
     FindTagResDto_Example:
