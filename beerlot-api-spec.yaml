@@ -4,6 +4,8 @@ info:
   description: BeerLot API
   version: 1.0.0
 servers:
+- url: https://virtserver.swaggerhub.com/beerlot-contact/beerlot-api-spec/1.0.0
+  description: SwaggerHub API Auto Mocking
 - url: https://virtserver.swaggerhub.com/beerlot.contact/beerlot-api-spec/1.0.0
   description: SwaggerHub API Auto Mocking
 - url: https://virtserver.swaggerhub.com/beerlot.contact/beerlot-api/1.0.0
@@ -59,10 +61,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MemberCreateReq'
+              $ref: '#/components/schemas/MemberCreateReqDto'
             examples:
-              MemberReq_Example:
-                $ref: '#/components/examples/MemberReq_Example'
+              MemberReqDto_Example:
+                $ref: '#/components/examples/MemberReqDto_Example'
         required: true
       responses:
         "201":
@@ -79,10 +81,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MemberUpdateReq'
+              $ref: '#/components/schemas/MemberUpdateReqDto'
             examples:
               MemberUpdateReq_Example:
-                $ref: '#/components/examples/MemberUpdateReq_Example'
+                $ref: '#/components/examples/MemberUpdateReqDto_Example'
         required: true
       responses:
         "200":
@@ -90,10 +92,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MemberRes'
+                $ref: '#/components/schemas/MemberResDto'
               examples:
                 MemberRes_Example:
-                  $ref: '#/components/examples/MemberRes_Example'
+                  $ref: '#/components/examples/MemberResDto_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
@@ -110,10 +112,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MemberRes'
+                $ref: '#/components/schemas/MemberResDto'
               examples:
                 MemberRes_Example:
-                  $ref: '#/components/examples/MemberRes_Example'
+                  $ref: '#/components/examples/MemberResDto_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
@@ -134,7 +136,7 @@ paths:
         schema:
           type: string
         example: 골든 에일
-      - name: catgories
+      - name: categories
         in: query
         description: Categories
         required: false
@@ -235,7 +237,7 @@ paths:
                     name_en: Citra
                     description: 시트라 홉은...
                 items:
-                  $ref: '#/components/schemas/FindBeerRes'
+                  $ref: '#/components/schemas/FindBeerResDto'
         "500":
           description: Internal server error. Unexpected error.
       security: []
@@ -253,7 +255,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int64
         example: "1"
       responses:
         "200":
@@ -261,10 +264,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindBeerRes'
+                $ref: '#/components/schemas/FindBeerResDto'
               examples:
                 FindBeerRes_Example:
-                  $ref: '#/components/examples/FindBeerRes_Example'
+                  $ref: '#/components/examples/FindBeerResDto_Example'
         "404":
           description: Not found. The beer with specified ID was not found.
         "500":
@@ -284,7 +287,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int64
         example: "1"
       responses:
         "200":
@@ -301,7 +305,7 @@ paths:
                   content: 생각한것보다 좀 맹맹했어요ㅜㅜ
                   rate: 3.5
                 items:
-                  $ref: '#/components/schemas/ReviewRes'
+                  $ref: '#/components/schemas/ReviewResDto'
         "404":
           description: Not found. The beer with specified ID was not found.
         "500":
@@ -319,16 +323,17 @@ paths:
         style: simple
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int64
         example: "1"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewCreateReq'
+              $ref: '#/components/schemas/ReviewCreateReqDto'
             examples:
               ReviewCreateReq_Example:
-                $ref: '#/components/examples/ReviewCreateReq_Example'
+                $ref: '#/components/examples/ReviewCreateReqDto_Example'
         required: true
       responses:
         "201":
@@ -353,7 +358,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int64
         example: "1"
       responses:
         "200":
@@ -362,7 +368,7 @@ paths:
             application/json:
               examples:
                 ReviewRes_Example:
-                  $ref: '#/components/examples/ReviewRes_Example'
+                  $ref: '#/components/examples/ReviewResDto_Example'
         "404":
           description: Not found. The review with specified ID was not found.
         "500":
@@ -380,7 +386,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int64
         example: "1"
       responses:
         "204":
@@ -406,16 +413,17 @@ paths:
         style: simple
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int64
         example: "1"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewCreateReq'
+              $ref: '#/components/schemas/ReviewCreateReqDto'
             examples:
               ReviewCreateReq_Example:
-                $ref: '#/components/examples/ReviewCreateReq_Example'
+                $ref: '#/components/examples/ReviewCreateReqDto_Example'
         required: true
       responses:
         "200":
@@ -423,10 +431,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReviewRes'
+                $ref: '#/components/schemas/ReviewResDto'
               examples:
                 ReviewRes_Example:
-                  $ref: '#/components/examples/ReviewRes_Example'
+                  $ref: '#/components/examples/ReviewResDto_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "403":
@@ -449,7 +457,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int64
         example: "1"
       responses:
         "200":
@@ -475,7 +484,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int64
         example: "1"
       responses:
         "200":
@@ -519,7 +529,7 @@ paths:
                     name: 아메리칸 IPA
                     description: This is American IPA.
                 items:
-                  $ref: '#/components/schemas/FindCategoryRes'
+                  $ref: '#/components/schemas/FindCategoryResDto'
         "500":
           description: Internal server error. Unexpected error.
       security: []
@@ -537,7 +547,8 @@ paths:
         style: simple
         explode: false
         schema:
-          type: string
+          type: integer
+          format: int64
         example: "1"
       responses:
         "200":
@@ -545,10 +556,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindCategoryRes'
+                $ref: '#/components/schemas/FindCategoryResDto'
               examples:
-                FindCategoryRes_Example:
-                  $ref: '#/components/examples/FindCategoryRes_Example'
+                FindCategoryResDto_Example:
+                  $ref: '#/components/examples/FindCategoryResDto_Example'
         "404":
           description: Not found. The category with specified ID was not found.
         "500":
@@ -575,13 +586,13 @@ paths:
                   name_ko: 생강
                   name_en: Ginger
                 items:
-                  $ref: '#/components/schemas/FindTagRes'
+                  $ref: '#/components/schemas/FindTagResDto'
         "500":
           description: Internal server error. Unexpected error.
       security: []
 components:
   schemas:
-    MemberCreateReq:
+    MemberCreateReqDto:
       required:
       - email
       - password
@@ -595,14 +606,14 @@ components:
         username:
           type: string
       description: Member Signup Form
-    MemberUpdateReq:
+    MemberUpdateReqDto:
       type: object
       properties:
         username:
           type: string
           example: beerlover
       description: Member Profile Update Form
-    ReviewCreateReq:
+    ReviewCreateReqDto:
       required:
       - content
       - rate
@@ -614,10 +625,7 @@ components:
           multipleOf: 0.5
           type: number
           format: float
-      x-class-extra-annotations:
-      - '@lombok.AllArgsConstructor'
-      - '@lombok.Getter'
-    BaseRes:
+    BaseResDto:
       required:
       - id
       type: object
@@ -625,7 +633,7 @@ components:
         id:
           type: integer
           format: int64
-    MemberRes:
+    MemberResDto:
       required:
       - email
       - email_verified
@@ -645,8 +653,8 @@ components:
           type: boolean
           default: false
       allOf:
-      - $ref: '#/components/schemas/BaseRes'
-    FindBeerRes:
+      - $ref: '#/components/schemas/BaseResDto'
+    FindBeerResDto:
       required:
       - description
       - name_en
@@ -662,7 +670,7 @@ components:
         description:
           type: string
         origin:
-          $ref: '#/components/schemas/CountryRes'
+          $ref: '#/components/schemas/CountryResDto'
         volume:
           minimum: 0.0
           type: integer
@@ -670,21 +678,23 @@ components:
         image_url:
           type: string
         category:
-          $ref: '#/components/schemas/FindCategorySupRes'
+          $ref: '#/components/schemas/FindCategorySupResDto'
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/FindTagRes'
+            $ref: '#/components/schemas/FindTagResDto'
       example:
-        $ref: '#/components/examples/FindBeerRes_Example'
+        $ref: '#/components/examples/FindBeerResDto_Example'
       allOf:
-      - $ref: '#/components/schemas/BaseRes'
-    CountryRes:
+      - $ref: '#/components/schemas/BaseResDto'
+      x-class-extra-annotations:
+      - '@lombok.Getter'
+    CountryResDto:
       type: object
       properties:
         code:
           type: string
-    FindCategoryRes:
+    FindCategoryResDto:
       required:
       - category
       - description
@@ -693,20 +703,24 @@ components:
         description:
           type: string
         category:
-          $ref: '#/components/schemas/FindCategoryRes'
+          $ref: '#/components/schemas/FindCategoryResDto'
       allOf:
-      - $ref: '#/components/schemas/BaseRes'
-    FindCategorySupRes:
+      - $ref: '#/components/schemas/BaseResDto'
+      x-class-extra-annotations:
+      - '@lombok.Getter'
+    FindCategorySupResDto:
       required:
       - parent
       type: object
       properties:
         parent:
-          $ref: '#/components/schemas/FindCategoryRes'
+          $ref: '#/components/schemas/FindCategoryResDto'
       allOf:
-      - $ref: '#/components/schemas/BaseRes'
-      - $ref: '#/components/schemas/FindCategoryRes'
-    FindTagRes:
+      - $ref: '#/components/schemas/BaseResDto'
+      - $ref: '#/components/schemas/FindCategoryResDto'
+      x-class-extra-annotations:
+      - '@lombok.Getter'
+    FindTagResDto:
       required:
       - name
       type: object
@@ -716,8 +730,10 @@ components:
         name_en:
           type: string
       allOf:
-      - $ref: '#/components/schemas/BaseRes'
-    ReviewRes:
+      - $ref: '#/components/schemas/BaseResDto'
+      x-class-extra-annotations:
+      - '@lombok.Getter'
+    ReviewResDto:
       required:
       - rate
       type: object
@@ -728,7 +744,7 @@ components:
           type: integer
           format: float
       allOf:
-      - $ref: '#/components/schemas/BaseRes'
+      - $ref: '#/components/schemas/BaseResDto'
   responses:
     Created:
       description: Created.
@@ -761,7 +777,7 @@ components:
         type: string
       example: 골든 에일
     categories:
-      name: catgories
+      name: categories
       in: query
       description: Categories
       required: false
@@ -810,7 +826,8 @@ components:
       style: simple
       explode: false
       schema:
-        type: string
+        type: integer
+        format: int64
       example: "1"
     categoryId:
       name: categoryId
@@ -820,7 +837,8 @@ components:
       style: simple
       explode: false
       schema:
-        type: string
+        type: integer
+        format: int64
       example: "1"
     reviewId:
       name: reviewId
@@ -830,22 +848,23 @@ components:
       style: simple
       explode: false
       schema:
-        type: string
+        type: integer
+        format: int64
       example: "1"
   examples:
-    MemberReq_Example:
+    MemberReqDto_Example:
       value:
         email: beer.lover@email.com
         password: PWbeer10ver*!
         username: 비어러버
-    MemberUpdateReq_Example:
+    MemberUpdateReqDto_Example:
       value:
         username: 퇴근후한캔
-    ReviewCreateReq_Example:
+    ReviewCreateReqDto_Example:
       value:
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
-    MemberRes_Example:
+    MemberResDto_Example:
       value:
         id: 1
         email: beer.lover@email.com
@@ -853,7 +872,7 @@ components:
         username: 비어러버
         image_url: "returned_from_server: <base_url>/<file_name>"
         email_verified: true
-    FindBeerRes_Example:
+    FindBeerResDto_Example:
       value:
         id: 1
         name_ko: 빅 웨이브
@@ -881,20 +900,20 @@ components:
           name_ko: 시트라
           name_en: Citra
           description: 시트라 홉은...
-    FindCategoryRes_Example:
+    FindCategoryResDto_Example:
       value:
         id: 1
         name: 아메리칸 블론드 에일
         description: This is Amerian Blonde Ale.
-    CountryRes_Example:
+    CountryResDto_Example:
       value:
         code: US
-    FindTagRes_Example:
+    FindTagResDto_Example:
       value:
         id: 1
         name_ko: 사이다
         name_en: Cider
-    ReviewRes_Example:
+    ReviewResDto_Example:
       value:
         id: 1
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
