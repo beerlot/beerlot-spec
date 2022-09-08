@@ -4,43 +4,42 @@ info:
   description: BeerLot API
   version: 1.0.0
 servers:
-  - url: https://virtserver.swaggerhub.com/beerlot-contact/beerlot-api-spec/1.0.0
-    description: SwaggerHub API Auto Mocking
-
+- url: https://virtserver.swaggerhub.com/beerlot-contact/beerlot-api-spec/1.0.0
+  description: SwaggerHub API Auto Mocking
 security:
-  - password:
-      - read
-      - write
+- password:
+  - read
+  - write
 tags:
-  - name: member
-    description: member management
-  - name: beer
-    description: beer management
-  - name: beer review
-    description: beer review management
-  - name: beer favorite
-    description: beer favorite management
-  - name: beer category
-    description: beer category management
-  - name: beer tag
-    description: beer tag management
+- name: member
+  description: member management
+- name: beer
+  description: beer management
+- name: beer review
+  description: beer review management
+- name: beer favorite
+  description: beer favorite management
+- name: beer category
+  description: beer category management
+- name: beer tag
+  description: beer tag management
 paths:
   /members:
     get:
       tags:
-        - member
+      - member
       summary: Check if given username already exists
       operationId: checkUsernameDuplicated
       parameters:
-        - name: username
-          in: query
-          description: username
-          required: true
-          style: form
-          explode: true
-          schema:
-            type: string
-          example: 비어러버
+      - name: username
+        in: query
+        description: username
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 비어러버
       responses:
         "200":
           description: Ok to use the username.
@@ -50,7 +49,7 @@ paths:
           description: Internal server error. Unexpected error.
     post:
       tags:
-        - member
+      - member
       summary: Signup
       operationId: createMember
       requestBody:
@@ -70,7 +69,7 @@ paths:
           description: Internal server error. Unexpected error.
     patch:
       tags:
-        - member
+      - member
       summary: Update Member Profile
       operationId: updateMember
       requestBody:
@@ -100,7 +99,7 @@ paths:
   /members/me:
     get:
       tags:
-        - member
+      - member
       summary: Get Member Profile
       operationId: getMember
       responses:
@@ -120,16 +119,75 @@ paths:
   /beers:
     get:
       tags:
-        - beer
+      - beer
       summary: Get all beers with full search
       operationId: findBeersBySearch
       parameters:
-        - $ref: '#/components/parameters/keyword'
-        - $ref: '#/components/parameters/categories'
-        - $ref: '#/components/parameters/countries'
-        - $ref: '#/components/parameters/volumes'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/size'
+      - name: keyword
+        in: query
+        description: Search keyword
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 골든 에일
+      - name: categories
+        in: query
+        description: Category IDs
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          example:
+          - 1
+          - 2
+          items:
+            type: integer
+            format: int64
+      - name: countries
+        in: query
+        description: Countries
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          example:
+          - KO
+          - US
+          items:
+            type: string
+      - name: volumes
+        in: query
+        description: Beer Alcohol Volume
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          example:
+          - 4
+          - 8
+          items:
+            type: integer
+      - name: page
+        in: query
+        description: page number
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: size
+        in: query
+        description: size of one page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
       responses:
         "200":
           description: OK
@@ -143,20 +201,20 @@ paths:
   /beers/{beerId}:
     get:
       tags:
-        - beer
+      - beer
       summary: Get one beer
       operationId: findBeerById
       parameters:
-        - name: beerId
-          in: path
-          description: beer id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: OK
@@ -175,20 +233,20 @@ paths:
   /reviews/{beerId}:
     get:
       tags:
-        - beer review
+      - beer review
       summary: Get all reviews specified by beer ID
       operationId: getReviews
       parameters:
-        - name: beerId
-          in: path
-          description: beer id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: Ok.
@@ -197,12 +255,12 @@ paths:
               schema:
                 type: array
                 example:
-                  - id: 1
-                    content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
-                    rate: 5.0
-                  - id: 2
-                    content: 생각한것보다 좀 맹맹했어요ㅜㅜ
-                    rate: 3.5
+                - id: 1
+                  content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
+                  rate: 5.0
+                - id: 2
+                  content: 생각한것보다 좀 맹맹했어요ㅜㅜ
+                  rate: 3.5
                 items:
                   $ref: '#/components/schemas/ReviewResDto'
         "404":
@@ -211,20 +269,20 @@ paths:
           description: Internal server error. Unexpected error.
     post:
       tags:
-        - beer review
+      - beer review
       summary: Create a new review
       operationId: createReview
       parameters:
-        - name: beerId
-          in: path
-          description: beer id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       requestBody:
         content:
           application/json:
@@ -246,20 +304,20 @@ paths:
   /reviews/{reviewId}:
     get:
       tags:
-        - beer review
+      - beer review
       summary: Get one review with specified ID
       operationId: getReview
       parameters:
-        - name: reviewId
-          in: path
-          description: beer review id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: Ok. Get review.
@@ -274,20 +332,20 @@ paths:
           description: Internal server error. Unexpected error.
     delete:
       tags:
-        - beer review
+      - beer review
       summary: Delete the review
       operationId: deleteReview
       parameters:
-        - name: reviewId
-          in: path
-          description: beer review id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "204":
           description: Review deleted.
@@ -301,20 +359,20 @@ paths:
           description: Internal server error. Unexpected error.
     patch:
       tags:
-        - beer review
+      - beer review
       summary: Update the review
       operationId: updateReview
       parameters:
-        - name: reviewId
-          in: path
-          description: beer review id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       requestBody:
         content:
           application/json:
@@ -345,20 +403,20 @@ paths:
   /beers/{beerId}/favorites:
     post:
       tags:
-        - beer favorite
+      - beer favorite
       summary: Favorite the beer with specified id
       operationId: createFavorite
       parameters:
-        - name: beerId
-          in: path
-          description: beer id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: Already favorited.
@@ -372,20 +430,20 @@ paths:
           description: Internal server error. Unexpected error.
     delete:
       tags:
-        - beer favorite
+      - beer favorite
       summary: Unfavorite the beer with specified id
       operationId: deleteFavorite
       parameters:
-        - name: beerId
-          in: path
-          description: beer id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: No favorite found.
@@ -400,7 +458,7 @@ paths:
   /categories:
     get:
       tags:
-        - beer category
+      - beer category
       summary: Get all categories
       operationId: getCategories
       responses:
@@ -411,22 +469,22 @@ paths:
               schema:
                 type: array
                 example:
-                  - id: 1
-                    name: 에일
-                    description: This is Ale.
-                    children:
-                      - id: 10
-                        name: 아메리칸 블론드 에일
-                        description: This is American Blonde Ale.
-                  - id: 2
-                    name: IPA
-                    children:
-                      - id: 17
-                        name: 잉글리쉬 IPA
-                        description: This is English IPA.
-                      - id: 21
-                        name: 아메리칸 IPA
-                        description: This is American IPA.
+                - id: 1
+                  name: 에일
+                  description: This is Ale.
+                  children:
+                  - id: 10
+                    name: 아메리칸 블론드 에일
+                    description: This is American Blonde Ale.
+                - id: 2
+                  name: IPA
+                  children:
+                  - id: 17
+                    name: 잉글리쉬 IPA
+                    description: This is English IPA.
+                  - id: 21
+                    name: 아메리칸 IPA
+                    description: This is American IPA.
                 items:
                   $ref: '#/components/schemas/FindCategorySupResDto'
         "500":
@@ -435,20 +493,20 @@ paths:
   /categories/{categoryId}:
     get:
       tags:
-        - beer category
+      - beer category
       summary: Get one category found by category id
       operationId: getCategory
       parameters:
-        - name: categoryId
-          in: path
-          description: beer category id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+      - name: categoryId
+        in: path
+        description: beer category id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: OK
@@ -467,7 +525,7 @@ paths:
   /tags:
     get:
       tags:
-        - beer tag
+      - beer tag
       summary: Get all beer tags
       operationId: getTags
       responses:
@@ -478,12 +536,12 @@ paths:
               schema:
                 type: array
                 example:
-                  - id: 1
-                    name_ko: 사이다
-                    name_en: Cider
-                  - id: 2
-                    name_ko: 생강
-                    name_en: Ginger
+                - id: 1
+                  name_ko: 사이다
+                  name_en: Cider
+                - id: 2
+                  name_ko: 생강
+                  name_en: Ginger
                 items:
                   $ref: '#/components/schemas/FindTagResDto'
         "500":
@@ -505,9 +563,9 @@ components:
           format: int32
     MemberCreateReqDto:
       required:
-        - email
-        - password
-        - username
+      - email
+      - password
+      - username
       type: object
       properties:
         email:
@@ -526,8 +584,8 @@ components:
       description: Member Profile Update Form
     ReviewCreateReqDto:
       required:
-        - content
-        - rate
+      - content
+      - rate
       type: object
       properties:
         content:
@@ -538,7 +596,7 @@ components:
           format: float
     BaseResDto:
       required:
-        - id
+      - id
       type: object
       properties:
         id:
@@ -546,10 +604,10 @@ components:
           format: int64
     MemberResDto:
       required:
-        - email
-        - email_verified
-        - password
-        - username
+      - email
+      - email_verified
+      - password
+      - username
       type: object
       properties:
         email:
@@ -564,14 +622,14 @@ components:
           type: boolean
           default: false
       allOf:
-        - $ref: '#/components/schemas/BaseResDto'
+      - $ref: '#/components/schemas/BaseResDto'
     FindBeerResDto:
       required:
-        - description
-        - name_en
-        - name_ko
-        - country
-        - volume
+      - country
+      - description
+      - name_en
+      - name_ko
+      - volume
       type: object
       properties:
         name_en:
@@ -597,7 +655,7 @@ components:
       example:
         $ref: '#/components/examples/FindBeerResDto_Example'
       allOf:
-        - $ref: '#/components/schemas/BaseResDto'
+      - $ref: '#/components/schemas/BaseResDto'
     FindCountryResDto:
       type: object
       properties:
@@ -605,10 +663,10 @@ components:
           type: string
     FindCategorySupResDto:
       required:
-        - name_ko
-        - name_en
-        - description
-        - parent
+      - description
+      - name_en
+      - name_ko
+      - parent
       type: object
       properties:
         name_ko:
@@ -620,10 +678,10 @@ components:
         parent:
           $ref: '#/components/schemas/FindCategorySupResDto'
       allOf:
-        - $ref: '#/components/schemas/BaseResDto'
+      - $ref: '#/components/schemas/BaseResDto'
     FindTagResDto:
       required:
-        - name
+      - name
       type: object
       properties:
         name_ko:
@@ -631,10 +689,10 @@ components:
         name_en:
           type: string
       allOf:
-        - $ref: '#/components/schemas/BaseResDto'
+      - $ref: '#/components/schemas/BaseResDto'
     ReviewResDto:
       required:
-        - rate
+      - rate
       type: object
       properties:
         content:
@@ -643,7 +701,7 @@ components:
           type: integer
           format: float
       allOf:
-        - $ref: '#/components/schemas/BaseResDto'
+      - $ref: '#/components/schemas/BaseResDto'
   responses:
     Created:
       description: Created.
@@ -685,8 +743,8 @@ components:
       schema:
         type: array
         example:
-          - 1
-          - 2
+        - 1
+        - 2
         items:
           type: integer
           format: int64
@@ -700,8 +758,8 @@ components:
       schema:
         type: array
         example:
-          - KO
-          - US
+        - KO
+        - US
         items:
           type: string
     volumes:
@@ -714,8 +772,8 @@ components:
       schema:
         type: array
         example:
-          - 4
-          - 8
+        - 4
+        - 8
         items:
           type: integer
     beerId:
@@ -814,10 +872,10 @@ components:
             name_en: Ale
             description: 에일은...
         tags:
-          - id: 1
-            name_ko: 시트라
-            name_en: Citra
-            description: 시트라 홉은...
+        - id: 1
+          name_ko: 시트라
+          name_en: Citra
+          description: 시트라 홉은...
     FindCategoryResDto_Example:
       value:
         id: 1
