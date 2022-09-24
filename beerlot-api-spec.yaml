@@ -13,8 +13,8 @@ security:
   - read
   - write
 tags:
-- name: member
-  description: member management
+- name: user
+  description: user management
 - name: beer
   description: beer management
 - name: beer review
@@ -26,10 +26,10 @@ tags:
 - name: beer tag
   description: beer tag management
 paths:
-  /members:
+  /users:
     get:
       tags:
-      - member
+      - user
       summary: Check if given username already exists
       operationId: checkUsernameDuplicated
       parameters:
@@ -51,18 +51,18 @@ paths:
           description: Internal server error. Unexpected error.
     post:
       tags:
-      - member
+      - user
       summary: Signup
-      operationId: createMember
+      operationId: createUser
       requestBody:
-        description: Member Signup Form
+        description: User Signup Form
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MemberCreateReqDto'
+              $ref: '#/components/schemas/UserCreateReqDto'
             examples:
-              MemberReqDto_Example:
-                $ref: '#/components/examples/MemberReqDto_Example'
+              UserReqDto_Example:
+                $ref: '#/components/examples/UserReqDto_Example'
         required: true
       responses:
         "201":
@@ -71,18 +71,18 @@ paths:
           description: Internal server error. Unexpected error.
     patch:
       tags:
-      - member
-      summary: Update Member Profile
-      operationId: updateMember
+      - user
+      summary: Update User Profile
+      operationId: updateUser
       requestBody:
-        description: Member Profile Update Form
+        description: User Profile Update Form
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MemberUpdateReqDto'
+              $ref: '#/components/schemas/UserUpdateReqDto'
             examples:
-              MemberUpdateReq_Example:
-                $ref: '#/components/examples/MemberUpdateReqDto_Example'
+              UserUpdateReq_Example:
+                $ref: '#/components/examples/UserUpdateReqDto_Example'
         required: true
       responses:
         "200":
@@ -90,30 +90,30 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MemberResDto'
+                $ref: '#/components/schemas/UserResDto'
               examples:
-                MemberRes_Example:
-                  $ref: '#/components/examples/MemberResDto_Example'
+                UserRes_Example:
+                  $ref: '#/components/examples/UserResDto_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
           description: Internal server error. Unexpected error.
-  /members/me:
+  /users/me:
     get:
       tags:
-      - member
-      summary: Get Member Profile
-      operationId: getMember
+      - user
+      summary: Get User Profile
+      operationId: getUser
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MemberResDto'
+                $ref: '#/components/schemas/UserResDto'
               examples:
-                MemberRes_Example:
-                  $ref: '#/components/examples/MemberResDto_Example'
+                UserRes_Example:
+                  $ref: '#/components/examples/UserResDto_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
@@ -563,7 +563,7 @@ components:
         total:
           type: integer
           format: int32
-    MemberCreateReqDto:
+    UserCreateReqDto:
       required:
       - email
       - password
@@ -576,14 +576,14 @@ components:
           type: string
         username:
           type: string
-      description: Member Signup Form
-    MemberUpdateReqDto:
+      description: User Signup Form
+    UserUpdateReqDto:
       type: object
       properties:
         username:
           type: string
           example: beerlover
-      description: Member Profile Update Form
+      description: User Profile Update Form
     ReviewCreateReqDto:
       required:
       - content
@@ -604,7 +604,7 @@ components:
         id:
           type: integer
           format: int64
-    MemberResDto:
+    UserResDto:
       required:
       - email
       - email_verified
@@ -714,10 +714,10 @@ components:
     InternalServerError:
       description: Internal server error. Unexpected error.
   parameters:
-    memberId:
-      name: memberId
+    userId:
+      name: userId
       in: path
-      description: Member ID
+      description: User ID
       required: true
       style: simple
       explode: false
@@ -830,19 +830,19 @@ components:
       schema:
         type: integer
   examples:
-    MemberReqDto_Example:
+    UserReqDto_Example:
       value:
         email: beer.lover@email.com
         password: PWbeer10ver*!
         username: 비어러버
-    MemberUpdateReqDto_Example:
+    UserUpdateReqDto_Example:
       value:
         username: 퇴근후한캔
     ReviewCreateReqDto_Example:
       value:
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
-    MemberResDto_Example:
+    UserResDto_Example:
       value:
         id: 1
         email: beer.lover@email.com
