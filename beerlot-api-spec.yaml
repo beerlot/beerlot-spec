@@ -183,7 +183,7 @@ paths:
         "500":
           description: Internal server error. Unexpected error.
       security: []
-  /reviews/{beerId}:
+  /beers/{beerId}/reviews:
     get:
       tags:
         - beer review
@@ -198,15 +198,13 @@ paths:
             application/json:
               schema:
                 type: array
-                example:
-                  - id: 1
-                    content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
-                    rate: 5.0
-                  - id: 2
-                    content: 생각한것보다 좀 맹맹했어요ㅜㅜ
-                    rate: 3.5
                 items:
                   $ref: '#/components/schemas/ReviewResponse'
+              examples:
+                ReviewResponse_Example:
+                  $ref: '#/components/examples/ReviewResponses_Example'
+
+                  
         "404":
           description: Not found. The beer with specified ID was not found.
         "500":
@@ -918,6 +916,14 @@ components:
         id: 1
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
+    ReviewResponses_Example:
+      value:
+        - id: 1
+          content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
+          rate: 5.0
+        - id: 1
+          content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
+          rate: 5.0
   securitySchemes:
     password:
       type: oauth2
