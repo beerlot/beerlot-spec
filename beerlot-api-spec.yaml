@@ -329,6 +329,8 @@ paths:
           description: Ok. Get review.
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewResponse'
               examples:
                 ReviewResponse_Example:
                   $ref: '#/components/examples/ReviewResponse_Example'
