@@ -199,12 +199,10 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ReviewResponse'
+                  $ref: '#/components/schemas/FindReviewResponse'
               examples:
-                ReviewResponse_Example:
-                  $ref: '#/components/examples/ReviewResponses_Example'
-
-                  
+                FindReviewsResponse_Example:
+                  $ref: '#/components/examples/FindReviewsResponse_Example'
         "404":
           description: Not found. The beer with specified ID was not found.
         "500":
@@ -266,8 +264,8 @@ paths:
           content:
             application/json:
               examples:
-                ReviewRes_Example:
-                  $ref: '#/components/examples/ReviewResponse_Example'
+                FindReviewResponse_Example:
+                  $ref: '#/components/examples/FindReviewResponse_Example'
         "404":
           description: Not found. The review with specified ID was not found.
         "500":
@@ -330,10 +328,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReviewResponse'
+                $ref: '#/components/schemas/FindReviewResponse'
               examples:
-                ReviewResponse_Example:
-                  $ref: '#/components/examples/ReviewResponse_Example'
+                FindReviewResponse_Example:
+                  $ref: '#/components/examples/FindReviewResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "403":
@@ -674,7 +672,7 @@ components:
           type: string
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
-    ReviewResponse:
+    FindReviewResponse:
       required:
         - rate
       type: object
@@ -911,19 +909,19 @@ components:
         id: 1
         name_ko: 사이다
         name_en: Cider
-    ReviewResponse_Example:
+    FindReviewResponse_Example:
       value:
         id: 1
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
-    ReviewResponses_Example:
+    FindReviewsResponse_Example:
       value:
         - id: 1
           content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
           rate: 5.0
-        - id: 1
-          content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
-          rate: 5.0
+        - id: 10
+          content: 생각보다 좀 맹맹했어요ㅠㅠ
+          rate: 3.5
   securitySchemes:
     password:
       type: oauth2
