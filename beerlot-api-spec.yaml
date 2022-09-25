@@ -194,8 +194,6 @@ paths:
           in: path
           description: beer id
           required: true
-          style: simple
-          explode: false
           schema:
             type: integer
             format: int64
