@@ -144,6 +144,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BeerPage'
+              
         "500":
           description: Internal server error. Unexpected error.
       security: []
@@ -517,7 +518,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FindBeerResponse'
-        pageRequest:
+        page_request:
           type: object
           properties:
             page:
@@ -528,10 +529,10 @@ components:
               type: integer
         page:
           type: integer
-        totalElements:
+        total_elements:
           type: integer
           format: int32
-        totalPages:
+        total_pages:
           type: integer
         nextPage:
           type: integer
@@ -625,6 +626,7 @@ components:
       properties:
         name_en:
           type: string
+          example: 'namedf'
         name_ko:
           type: string
         description:
@@ -820,7 +822,9 @@ components:
       schema:
         type: integer
 
-  examples:
+
+          
+          
     CreateUserRequest_Example:
       value:
         email: beer.lover@email.com
