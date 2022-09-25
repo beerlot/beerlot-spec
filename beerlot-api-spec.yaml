@@ -19,9 +19,9 @@ tags:
   description: user management
 - name: beer
   description: beer management
-- name: beer review
+- name: review
   description: beer review management
-- name: beer review like
+- name: review like
   description: beer review like management
 - name: beer like
   description: beer like management
@@ -243,7 +243,7 @@ paths:
   /beers/{beerId}/reviews:
     get:
       tags:
-      - beer review
+      - review
       summary: Get all reviews specified by beer ID
       operationId: findReviewsByBeerId
       parameters:
@@ -275,7 +275,7 @@ paths:
           description: Internal server error. Unexpected error.
     post:
       tags:
-      - beer review
+      - review
       summary: Create a new review
       operationId: createReview
       parameters:
@@ -310,7 +310,7 @@ paths:
   /reviews/{reviewId}:
     get:
       tags:
-      - beer review
+      - review
       summary: Get one review with specified ID
       operationId: getReview
       parameters:
@@ -338,7 +338,7 @@ paths:
           description: Internal server error. Unexpected error.
     delete:
       tags:
-      - beer review
+      - review
       summary: Delete the review
       operationId: deleteReview
       parameters:
@@ -365,7 +365,7 @@ paths:
           description: Internal server error. Unexpected error.
     patch:
       tags:
-      - beer review
+      - review
       summary: Update the review
       operationId: updateReview
       parameters:
@@ -409,7 +409,7 @@ paths:
   /reviews/{reviewId}/likes:
     post:
       tags:
-      - beer review like
+      - review like
       summary: Like the review with specified id
       operationId: createReviewLike
       parameters:
@@ -436,7 +436,7 @@ paths:
           description: Internal server error. Unexpected error.
     delete:
       tags:
-      - beer review like
+      - review like
       summary: UnLike the review with specified id
       operationId: deleteReviewLike
       parameters:
