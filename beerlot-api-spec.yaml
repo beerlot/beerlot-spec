@@ -190,14 +190,7 @@ paths:
       summary: Get all reviews specified by beer ID
       operationId: findReviewsByBeerId
       parameters:
-        - name: beerId
-          in: path
-          description: beer id
-          required: true
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+        - $ref: '#/components/parameters/beerId'
       responses:
         "200":
           description: Ok.
@@ -775,12 +768,10 @@ components:
       in: path
       description: beer id
       required: true
-      style: simple
-      explode: false
       schema:
         type: integer
         format: int64
-      example: "1"
+      example: 1
     categoryId:
       name: categoryId
       in: path
