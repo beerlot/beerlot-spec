@@ -22,8 +22,10 @@ tags:
     description: beer management
   - name: beer review
     description: beer review management
-  - name: beer favorite
-    description: beer favorite management
+  - name: beer review like
+    description: beer review like management
+  - name: beer like
+    description: beer like management
   - name: beer category
     description: beer category management
   - name: beer tag
@@ -41,10 +43,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: '#/components/schemas/UserCreateRequest'
             examples:
-              CreateUserRequest_Example:
-                $ref: '#/components/examples/CreateUserRequest_Example'
+              UserCreateRequest_Example:
+                $ref: '#/components/examples/UserCreateRequest_Example'
       responses:
         "201":
           description: Created.
@@ -86,20 +88,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserRequest'
+              $ref: '#/components/schemas/UserUpdateRequest'
             examples:
-              UpdateUserRequest_Example:
-                $ref: '#/components/examples/UpdateUserRequest_Example'
+              UserUpdateRequest_Example:
+                $ref: '#/components/examples/UserUpdateRequest_Example'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindUserResponse'
+                $ref: '#/components/schemas/UserResponse'
               examples:
                 UserRes_Example:
-                  $ref: '#/components/examples/FindUserResponse_Example'
+                  $ref: '#/components/examples/UserResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
@@ -116,10 +118,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindUserResponse'
+                $ref: '#/components/schemas/UserResponse'
               examples:
-                FindUserRes_Example:
-                  $ref: '#/components/examples/FindUserResponse_Example'
+                UserRes_Example:
+                  $ref: '#/components/examples/UserResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
@@ -174,10 +176,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindBeerResponse'
+                $ref: '#/components/schemas/BeerResponse'
               examples:
-                FindBeerRes_Example:
-                  $ref: '#/components/examples/FindBeerResponse_Example'
+                BeerRes_Example:
+                  $ref: '#/components/examples/BeerResponse_Example'
         "404":
           description: Not found. The beer with specified ID was not found.
         "500":
@@ -199,10 +201,10 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FindReviewResponse'
+                  $ref: '#/components/schemas/ReviewResponse'
               examples:
-                FindReviewsResponse_Example:
-                  $ref: '#/components/examples/FindReviewsResponse_Example'
+                ReviewsResponse_Example:
+                  $ref: '#/components/examples/ReviewsResponse_Example'
         "404":
           description: Not found. The beer with specified ID was not found.
         "500":
@@ -218,10 +220,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReviewRequest'
+              $ref: '#/components/schemas/ReviewCreateRequest'
             examples:
-              CreateReviewRequest_Example:
-                $ref: '#/components/examples/CreateReviewRequest_Example'
+              ReviewCreateRequest_Example:
+                $ref: '#/components/examples/ReviewCreateRequest_Example'
         required: true
       responses:
         "201":
@@ -239,24 +241,15 @@ paths:
       summary: Get one review with specified ID
       operationId: getReview
       parameters:
-        - name: reviewId
-          in: path
-          description: beer review id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+        - $ref: '#/components/parameters/reviewId'
       responses:
         "200":
           description: Ok. Get review.
           content:
             application/json:
               examples:
-                FindReviewResponse_Example:
-                  $ref: '#/components/examples/FindReviewResponse_Example'
+                ReviewResponse_Example:
+                  $ref: '#/components/examples/ReviewResponse_Example'
         "404":
           description: Not found. The review with specified ID was not found.
         "500":
@@ -267,16 +260,7 @@ paths:
       summary: Delete the review
       operationId: deleteReview
       parameters:
-        - name: reviewId
-          in: path
-          description: beer review id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+        - $ref: '#/components/parameters/reviewId'
       responses:
         "204":
           description: Review deleted.
@@ -294,24 +278,15 @@ paths:
       summary: Update the review
       operationId: updateReview
       parameters:
-        - name: reviewId
-          in: path
-          description: beer review id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+        - $ref: '#/components/parameters/reviewId'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateReviewRequest'
+              $ref: '#/components/schemas/ReviewUpdateRequest'
             examples:
-              CreateReviewRequest_Example:
-                $ref: '#/components/examples/CreateReviewRequest_Example'
+              ReviewUpdateRequest_Example:
+                $ref: '#/components/examples/ReviewUpdateRequest_Example'
         required: true
       responses:
         "200":
@@ -319,10 +294,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindReviewResponse'
+                $ref: '#/components/schemas/ReviewResponse'
               examples:
-                FindReviewResponse_Example:
-                  $ref: '#/components/examples/FindReviewResponse_Example'
+                ReviewResponse_Example:
+                  $ref: '#/components/examples/ReviewResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "403":
@@ -331,28 +306,59 @@ paths:
           description: Not found. The review with specified ID was not found.
         "500":
           description: Internal server error. Unexpected error.
-  /beers/{beerId}/favorites:
+
+  /reviews/{reviewId}/likes:
     post:
       tags:
-        - beer favorite
-      summary: Favorite the beer with specified id
-      operationId: createFavorite
+        - beer review like
+      summary: Like the review with specified id
+      operationId: createReviewLike
       parameters:
-        - name: beerId
-          in: path
-          description: beer id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+        - $ref: '#/components/parameters/reviewId'
       responses:
         "200":
-          description: Already favorited.
+          description: Already liked.
         "201":
-          description: Favorite created.
+          description: Like created.
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "404":
+          description: Not found. The beer with specified ID was not found.
+        "500":
+          description: Internal server error. Unexpected error.
+    
+    delete:
+      tags:
+        - beer review like
+      summary: UnLike the review with specified id
+      operationId: deleteReviewLike
+      parameters:
+        - $ref: '#/components/parameters/reviewId'
+      responses:
+        "200":
+          description: No like found.
+        "204":
+          description: Unlike succeeded.
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "404":
+          description: Not found. The beer with specified ID was not found.
+        "500":
+          description: Internal server error. Unexpected error.
+
+  /beers/{beerId}/likes:
+    post:
+      tags:
+        - beer like
+      summary: Like the beer with specified id
+      operationId: createBeerLike
+      parameters:
+        - $ref: '#/components/parameters/beerId'
+      responses:
+        "200":
+          description: Already liked.
+        "201":
+          description: Like created.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
@@ -361,25 +367,16 @@ paths:
           description: Internal server error. Unexpected error.
     delete:
       tags:
-        - beer favorite
-      summary: Unfavorite the beer with specified id
-      operationId: deleteFavorite
+        - beer like
+      summary: UnLike the beer with specified id
+      operationId: deleteBeerLike
       parameters:
-        - name: beerId
-          in: path
-          description: beer id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+        - $ref: '#/components/parameters/beerId'
       responses:
         "200":
-          description: No favorite found.
+          description: No like found.
         "204":
-          description: Unfavorite succeeded.
+          description: Unlike succeeded.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
@@ -417,7 +414,7 @@ paths:
                         name: 아메리칸 IPA
                         description: This is American IPA.
                 items:
-                  $ref: '#/components/schemas/FindCategorySupResponse'
+                  $ref: '#/components/schemas/CategorySupResponse'
         "500":
           description: Internal server error. Unexpected error.
       security: []
@@ -444,10 +441,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindCategorySupResponse'
+                $ref: '#/components/schemas/CategorySupResponse'
               examples:
-                FindCategoryResponse_Example:
-                  $ref: '#/components/examples/FindCategoryResponse_Example'
+                CategoryResponse_Example:
+                  $ref: '#/components/examples/CategoryResponse_Example'
         "404":
           description: Not found. The category with specified ID was not found.
         "500":
@@ -474,7 +471,7 @@ paths:
                     name_ko: 생강
                     name_en: Ginger
                 items:
-                  $ref: '#/components/schemas/FindTagResponse'
+                  $ref: '#/components/schemas/TagResponse'
         "500":
           description: Internal server error. Unexpected error.
       security: []
@@ -498,7 +495,7 @@ components:
         contents:
           type: array
           items:
-            $ref: '#/components/schemas/FindBeerResponse'
+            $ref: '#/components/schemas/BeerResponse'
         page_request:
           type: object
           properties:
@@ -519,7 +516,7 @@ components:
           type: integer
           format: int32
    
-    CreateUserRequest:
+    UserCreateRequest:
       description: User Signup Form
       required:
         - email
@@ -537,7 +534,7 @@ components:
         provider_type:
           $ref: '#/components/schemas/ProviderType'
           
-    UpdateUserRequest:
+    UserUpdateRequest:
       description: User Profile Update Form
       type: object
       required:
@@ -549,7 +546,19 @@ components:
           type: string
         status_message:
           type: string
-    CreateReviewRequest:
+    ReviewCreateRequest:
+      required:
+        - content
+        - rate
+      type: object
+      properties:
+        content:
+          type: string
+        rate:
+          multipleOf: 0.5
+          type: number
+          format: float
+    ReviewUpdateRequest:
       required:
         - content
         - rate
@@ -569,8 +578,8 @@ components:
         id:
           type: integer
           format: int64
-    FindUserResponse:
-      description: User Find Response
+    UserResponse:
+      description: User Response
       required:
         - email
         - username
@@ -595,7 +604,7 @@ components:
           type: string
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
-    FindBeerResponse:
+    BeerResponse:
       description: Beer Find Response
       required:
         - description
@@ -612,7 +621,7 @@ components:
         description:
           type: string
         country:
-          $ref: '#/components/schemas/FindCountryResponse'
+          $ref: '#/components/schemas/CountryResponse'
         volume:
           minimum: 0.0
           type: number
@@ -620,21 +629,21 @@ components:
         image_url:
           type: string
         category:
-          $ref: '#/components/schemas/FindCategorySupResponse'
+          $ref: '#/components/schemas/CategorySupResponse'
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/FindTagResponse'
+            $ref: '#/components/schemas/TagResponse'
       example:
-        $ref: '#/components/examples/FindBeerResponse_Example'
+        $ref: '#/components/examples/BeerResponse_Example'
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
-    FindCountryResponse:
+    CountryResponse:
       type: object
       properties:
         code:
           type: string
-    FindCategorySupResponse:
+    CategorySupResponse:
       required:
         - name_ko
         - name_en
@@ -649,10 +658,10 @@ components:
         description:
           type: string
         parent:
-          $ref: '#/components/schemas/FindCategorySupResponse'
+          $ref: '#/components/schemas/CategorySupResponse'
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
-    FindTagResponse:
+    TagResponse:
       required:
         - name
       type: object
@@ -663,7 +672,7 @@ components:
           type: string
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
-    FindReviewResponse:
+    ReviewResponse:
       required:
         - rate
       type: object
@@ -673,6 +682,9 @@ components:
         rate:
           type: integer
           format: float
+        created_at:
+          type: string
+          format: date-time
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
   responses:
@@ -839,19 +851,23 @@ components:
         total_elements: 1
         total_pages: 1
         next_page: null
-    CreateUserRequest_Example:
+    UserCreateRequest_Example:
       value:
         email: beer.lover@email.com
         username: 비어러버
         provider_type: 
-    UpdateUserRequest_Example:
+    UserUpdateRequest_Example:
       value:
         username: 퇴근후한캔
-    CreateReviewRequest_Example:
+    ReviewCreateRequest_Example:
       value:
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
-    FindUserResponse_Example:
+    ReviewUpdateRequest_Example:
+      value:
+        content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
+        rate: 5.0
+    UserResponse_Example:
       value:
         id: 1
         email: beer.lover@email.com
@@ -859,7 +875,7 @@ components:
         username: 비어러버
         image_url: "returned_from_server: <base_url>/<file_name>"
         email_verified: true
-    FindBeerResponse_Example:
+    BeerResponse_Example:
       value:
         id: 1
         name_ko: 빅 웨이브
@@ -887,32 +903,35 @@ components:
             name_ko: 시트라
             name_en: Citra
             description: 시트라 홉은...
-    FindCategoryResponse_Example:
+    CategoryResponse_Example:
       value:
         id: 1
         name: 아메리칸 블론드 에일
         description: This is American Blonde Ale.
-    FindCountryResponse_Example:
+    CountryResponse_Example:
       value:
         code: US
-    FindTagResponse_Example:
+    TagResponse_Example:
       value:
         id: 1
         name_ko: 사이다
         name_en: Cider
-    FindReviewResponse_Example:
+    ReviewResponse_Example:
       value:
         id: 1
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
-    FindReviewsResponse_Example:
+        created_at: 2022-09-25T16:19:25Z
+    ReviewsResponse_Example:
       value:
         - id: 1
           content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
           rate: 5.0
+          created_at: 2022-09-25T16:19:25Z
         - id: 10
           content: 생각보다 좀 맹맹했어요ㅠㅠ
           rate: 3.5
+          created_at: 2022-08-29T11:20:45Z
   securitySchemes:
     password:
       type: oauth2
