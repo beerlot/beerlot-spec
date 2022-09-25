@@ -312,7 +312,7 @@ paths:
       tags:
       - review
       summary: Get one review with specified ID
-      operationId: getReview
+      operationId: findReviewById
       parameters:
       - name: reviewId
         in: path
