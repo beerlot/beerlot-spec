@@ -213,24 +213,15 @@ paths:
       summary: Create a new review
       operationId: createReview
       parameters:
-        - name: beerId
-          in: path
-          description: beer id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            format: int64
-          example: "1"
+        - $ref: '#/components/parameters/beerId'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewCreateRequest'
+              $ref: '#/components/schemas/CreateReviewRequest'
             examples:
-              ReviewCreateReq_Example:
-                $ref: '#/components/examples/ReviewCreateRequest_Example'
+              CreateReviewRequest_Example:
+                $ref: '#/components/examples/CreateReviewRequest_Example'
         required: true
       responses:
         "201":
@@ -317,10 +308,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewCreateRequest'
+              $ref: '#/components/schemas/CreateReviewRequest'
             examples:
-              ReviewCreateRequest_Example:
-                $ref: '#/components/examples/ReviewCreateRequest_Example'
+              CreateReviewRequest_Example:
+                $ref: '#/components/examples/CreateReviewRequest_Example'
         required: true
       responses:
         "200":
@@ -558,7 +549,7 @@ components:
           type: string
         status_message:
           type: string
-    ReviewCreateRequest:
+    CreateReviewRequest:
       required:
         - content
         - rate
@@ -856,7 +847,7 @@ components:
     UpdateUserRequest_Example:
       value:
         username: 퇴근후한캔
-    ReviewCreateRequest_Example:
+    CreateReviewRequest_Example:
       value:
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
