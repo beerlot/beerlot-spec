@@ -677,6 +677,7 @@ components:
       type: object
       properties:
         content:
+          maxLength: 1000
           type: string
         rate:
           multipleOf: 0.5
@@ -689,6 +690,7 @@ components:
       type: object
       properties:
         content:
+          maxLength: 1000
           type: string
         rate:
           multipleOf: 0.5
@@ -802,9 +804,11 @@ components:
       type: object
       properties:
         content:
+          maxLength: 1000
           type: string
         rate:
-          type: integer
+          multipleOf: 0.5
+          type: number
           format: float
         created_at:
           type: string
