@@ -4,44 +4,69 @@ info:
   description: BeerLot API
   version: 1.0.0
 servers:
-- url: https://virtserver.swaggerhub.com/beerlot-contact/beerlot-api-spec/1.0.0
-  description: SwaggerHub API Auto Mocking
-- url: https://beerlot-core-ltcpnnhkfa-an.a.run.app/api/v1
-  description: DEV
+  - url: https://virtserver.swaggerhub.com/beerlot-contact/beerlot-api-spec/1.0.0
+    description: SwaggerHub API Auto Mocking
+  - url: https://beerlot-core-ltcpnnhkfa-an.a.run.app/api/v1
+    description: DEV
+
 security:
-- password:
-  - read
-  - write
+  - password:
+      - read
+      - write
 tags:
-- name: user
-  description: user management
-- name: beer
-  description: beer management
-- name: beer review
-  description: beer review management
-- name: beer favorite
-  description: beer favorite management
-- name: beer category
-  description: beer category management
-- name: beer tag
-  description: beer tag management
+  - name: auth
+    description: auth management
+  - name: user
+    description: user management
+  - name: beer
+    description: beer management
+  - name: beer review
+    description: beer review management
+  - name: beer favorite
+    description: beer favorite management
+  - name: beer category
+    description: beer category management
+  - name: beer tag
+    description: beer tag management
 paths:
+  /signup:
+    post:
+      tags:
+        - auth
+      summary: Signup User
+      operationId: createUser
+      requestBody:
+        description: User Signup Form
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+            examples:
+              CreateUserRequest_Example:
+                $ref: '#/components/examples/CreateUserRequest_Example'
+      responses:
+        "201":
+          description: Created.
+        "500":
+          description: Internal server error. Unexpected error.
+          
   /users:
     get:
       tags:
-      - user
+        - user
       summary: Check if given username already exists
       operationId: checkUsernameDuplicated
       parameters:
-      - name: username
-        in: query
-        description: username
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-        example: 비어러버
+        - name: username
+          in: query
+          description: username
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: 비어러버
       responses:
         "200":
           description: Ok to use the username.
@@ -49,51 +74,32 @@ paths:
           description: Conflict. The username already exists.
         "500":
           description: Internal server error. Unexpected error.
-    post:
-      tags:
-      - user
-      summary: Signup
-      operationId: createUser
-      requestBody:
-        description: User Signup Form
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreateReqDto'
-            examples:
-              UserReqDto_Example:
-                $ref: '#/components/examples/UserReqDto_Example'
-        required: true
-      responses:
-        "201":
-          description: Created.
-        "500":
-          description: Internal server error. Unexpected error.
+
     patch:
       tags:
-      - user
+        - user
       summary: Update User Profile
       operationId: updateUser
       requestBody:
         description: User Profile Update Form
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserUpdateReqDto'
+              $ref: '#/components/schemas/UpdateUserRequest'
             examples:
-              UserUpdateReq_Example:
-                $ref: '#/components/examples/UserUpdateReqDto_Example'
-        required: true
+              UpdateUserRequest_Example:
+                $ref: '#/components/examples/UpdateUserRequest_Example'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResDto'
+                $ref: '#/components/schemas/FindUserResponse'
               examples:
                 UserRes_Example:
-                  $ref: '#/components/examples/UserResDto_Example'
+                  $ref: '#/components/examples/FindUserResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
@@ -101,7 +107,7 @@ paths:
   /users/me:
     get:
       tags:
-      - user
+        - user
       summary: Get User Profile
       operationId: getUser
       responses:
@@ -110,10 +116,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResDto'
+                $ref: '#/components/schemas/FindUserResponse'
               examples:
-                UserRes_Example:
-                  $ref: '#/components/examples/UserResDto_Example'
+                FindUserRes_Example:
+                  $ref: '#/components/examples/FindUserResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
@@ -121,75 +127,16 @@ paths:
   /beers:
     get:
       tags:
-      - beer
+        - beer
       summary: Get all beers with full search
       operationId: findBeersBySearch
       parameters:
-      - name: keyword
-        in: query
-        description: Search keyword
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-        example: 골든 에일
-      - name: categories
-        in: query
-        description: Category IDs
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: array
-          example:
-          - 1
-          - 2
-          items:
-            type: integer
-            format: int64
-      - name: countries
-        in: query
-        description: Countries
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: array
-          example:
-          - KO
-          - US
-          items:
-            type: string
-      - name: volumes
-        in: query
-        description: Beer Alcohol Volume
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: array
-          example:
-          - 4
-          - 8
-          items:
-            type: integer
-      - name: page
-        in: query
-        description: page number
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: size
-        in: query
-        description: size of one page
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - $ref: '#/components/parameters/keyword'
+        - $ref: '#/components/parameters/categories'
+        - $ref: '#/components/parameters/countries'
+        - $ref: '#/components/parameters/volumes'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
       responses:
         "200":
           description: OK
@@ -203,30 +150,30 @@ paths:
   /beers/{beerId}:
     get:
       tags:
-      - beer
+        - beer
       summary: Get one beer
       operationId: findBeerById
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - name: beerId
+          in: path
+          description: beer id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+          example: "1"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindBeerResDto'
+                $ref: '#/components/schemas/FindBeerResponse'
               examples:
                 FindBeerRes_Example:
-                  $ref: '#/components/examples/FindBeerResDto_Example'
+                  $ref: '#/components/examples/FindBeerResponse_Example'
         "404":
           description: Not found. The beer with specified ID was not found.
         "500":
@@ -235,20 +182,20 @@ paths:
   /reviews/{beerId}:
     get:
       tags:
-      - beer review
+        - beer review
       summary: Get all reviews specified by beer ID
       operationId: getReviews
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - name: beerId
+          in: path
+          description: beer id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+          example: "1"
       responses:
         "200":
           description: Ok.
@@ -257,42 +204,42 @@ paths:
               schema:
                 type: array
                 example:
-                - id: 1
-                  content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
-                  rate: 5.0
-                - id: 2
-                  content: 생각한것보다 좀 맹맹했어요ㅜㅜ
-                  rate: 3.5
+                  - id: 1
+                    content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
+                    rate: 5.0
+                  - id: 2
+                    content: 생각한것보다 좀 맹맹했어요ㅜㅜ
+                    rate: 3.5
                 items:
-                  $ref: '#/components/schemas/ReviewResDto'
+                  $ref: '#/components/schemas/ReviewResponse'
         "404":
           description: Not found. The beer with specified ID was not found.
         "500":
           description: Internal server error. Unexpected error.
     post:
       tags:
-      - beer review
+        - beer review
       summary: Create a new review
       operationId: createReview
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - name: beerId
+          in: path
+          description: beer id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+          example: "1"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewCreateReqDto'
+              $ref: '#/components/schemas/ReviewCreateRequest'
             examples:
               ReviewCreateReq_Example:
-                $ref: '#/components/examples/ReviewCreateReqDto_Example'
+                $ref: '#/components/examples/ReviewCreateRequest_Example'
         required: true
       responses:
         "201":
@@ -306,20 +253,20 @@ paths:
   /reviews/{reviewId}:
     get:
       tags:
-      - beer review
+        - beer review
       summary: Get one review with specified ID
       operationId: getReview
       parameters:
-      - name: reviewId
-        in: path
-        description: beer review id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - name: reviewId
+          in: path
+          description: beer review id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+          example: "1"
       responses:
         "200":
           description: Ok. Get review.
@@ -327,27 +274,27 @@ paths:
             application/json:
               examples:
                 ReviewRes_Example:
-                  $ref: '#/components/examples/ReviewResDto_Example'
+                  $ref: '#/components/examples/ReviewResponse_Example'
         "404":
           description: Not found. The review with specified ID was not found.
         "500":
           description: Internal server error. Unexpected error.
     delete:
       tags:
-      - beer review
+        - beer review
       summary: Delete the review
       operationId: deleteReview
       parameters:
-      - name: reviewId
-        in: path
-        description: beer review id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - name: reviewId
+          in: path
+          description: beer review id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+          example: "1"
       responses:
         "204":
           description: Review deleted.
@@ -361,28 +308,28 @@ paths:
           description: Internal server error. Unexpected error.
     patch:
       tags:
-      - beer review
+        - beer review
       summary: Update the review
       operationId: updateReview
       parameters:
-      - name: reviewId
-        in: path
-        description: beer review id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - name: reviewId
+          in: path
+          description: beer review id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+          example: "1"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReviewCreateReqDto'
+              $ref: '#/components/schemas/ReviewCreateRequest'
             examples:
-              ReviewCreateReq_Example:
-                $ref: '#/components/examples/ReviewCreateReqDto_Example'
+              ReviewCreateRequest_Example:
+                $ref: '#/components/examples/ReviewCreateRequest_Example'
         required: true
       responses:
         "200":
@@ -390,10 +337,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReviewResDto'
+                $ref: '#/components/schemas/ReviewResponse'
               examples:
-                ReviewRes_Example:
-                  $ref: '#/components/examples/ReviewResDto_Example'
+                ReviewResponse_Example:
+                  $ref: '#/components/examples/ReviewResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "403":
@@ -405,20 +352,20 @@ paths:
   /beers/{beerId}/favorites:
     post:
       tags:
-      - beer favorite
+        - beer favorite
       summary: Favorite the beer with specified id
       operationId: createFavorite
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - name: beerId
+          in: path
+          description: beer id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+          example: "1"
       responses:
         "200":
           description: Already favorited.
@@ -432,20 +379,20 @@ paths:
           description: Internal server error. Unexpected error.
     delete:
       tags:
-      - beer favorite
+        - beer favorite
       summary: Unfavorite the beer with specified id
       operationId: deleteFavorite
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - name: beerId
+          in: path
+          description: beer id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+          example: "1"
       responses:
         "200":
           description: No favorite found.
@@ -460,7 +407,7 @@ paths:
   /categories:
     get:
       tags:
-      - beer category
+        - beer category
       summary: Get all categories
       operationId: getCategories
       responses:
@@ -471,54 +418,54 @@ paths:
               schema:
                 type: array
                 example:
-                - id: 1
-                  name: 에일
-                  description: This is Ale.
-                  children:
-                  - id: 10
-                    name: 아메리칸 블론드 에일
-                    description: This is American Blonde Ale.
-                - id: 2
-                  name: IPA
-                  children:
-                  - id: 17
-                    name: 잉글리쉬 IPA
-                    description: This is English IPA.
-                  - id: 21
-                    name: 아메리칸 IPA
-                    description: This is American IPA.
+                  - id: 1
+                    name: 에일
+                    description: This is Ale.
+                    children:
+                      - id: 10
+                        name: 아메리칸 블론드 에일
+                        description: This is American Blonde Ale.
+                  - id: 2
+                    name: IPA
+                    children:
+                      - id: 17
+                        name: 잉글리쉬 IPA
+                        description: This is English IPA.
+                      - id: 21
+                        name: 아메리칸 IPA
+                        description: This is American IPA.
                 items:
-                  $ref: '#/components/schemas/FindCategorySupResDto'
+                  $ref: '#/components/schemas/FindCategorySupResponse'
         "500":
           description: Internal server error. Unexpected error.
       security: []
   /categories/{categoryId}:
     get:
       tags:
-      - beer category
+        - beer category
       summary: Get one category found by category id
       operationId: getCategory
       parameters:
-      - name: categoryId
-        in: path
-        description: beer category id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - name: categoryId
+          in: path
+          description: beer category id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+          example: "1"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FindCategorySupResDto'
+                $ref: '#/components/schemas/FindCategorySupResponse'
               examples:
-                FindCategoryResDto_Example:
-                  $ref: '#/components/examples/FindCategoryResDto_Example'
+                FindCategoryResponse_Example:
+                  $ref: '#/components/examples/FindCategoryResponse_Example'
         "404":
           description: Not found. The category with specified ID was not found.
         "500":
@@ -527,7 +474,7 @@ paths:
   /tags:
     get:
       tags:
-      - beer tag
+        - beer tag
       summary: Get all beer tags
       operationId: getTags
       responses:
@@ -538,56 +485,92 @@ paths:
               schema:
                 type: array
                 example:
-                - id: 1
-                  name_ko: 사이다
-                  name_en: Cider
-                - id: 2
-                  name_ko: 생강
-                  name_en: Ginger
+                  - id: 1
+                    name_ko: 사이다
+                    name_en: Cider
+                  - id: 2
+                    name_ko: 생강
+                    name_en: Ginger
                 items:
-                  $ref: '#/components/schemas/FindTagResDto'
+                  $ref: '#/components/schemas/FindTagResponse'
         "500":
           description: Internal server error. Unexpected error.
       security: []
 components:
   schemas:
+    ProviderType:
+      type: string
+      enum:
+        - FACEBOOK
+        - GOOGLE
+        - KAKAO
+        - NAVER
+    RoleType:
+      type: string
+      enum:
+        - GENERAL
+        - ADMIN
     BeerPage:
       type: object
       properties:
         contents:
           type: array
           items:
-            $ref: '#/components/schemas/FindBeerResDto'
-        pageable:
+            $ref: '#/components/schemas/FindBeerResponse'
+        pageRequest:
           type: object
-        total:
+          properties:
+            page:
+              type: integer
+            size:
+              type: integer
+            offset:
+              type: integer
+        page:
+          type: integer
+        totalElements:
           type: integer
           format: int32
-    UserCreateReqDto:
+        totalPages:
+          type: integer
+        nextPage:
+          type: integer
+          format: int32
+   
+    CreateUserRequest:
+      description: User Signup Form
       required:
-      - email
-      - password
-      - username
+        - email
+        - username
+        - provider_type
       type: object
       properties:
         email:
           type: string
-        password:
-          type: string
+          format: email
         username:
           type: string
-      description: User Signup Form
-    UserUpdateReqDto:
+        image_url:
+          type: string
+        provider_type:
+          $ref: '#/components/schemas/ProviderType'
+          
+    UpdateUserRequest:
+      description: User Profile Update Form
       type: object
+      required:
+        - username
       properties:
         username:
           type: string
-          example: beerlover
-      description: User Profile Update Form
-    ReviewCreateReqDto:
+        image_url:
+          type: string
+        status_message:
+          type: string
+    ReviewCreateRequest:
       required:
-      - content
-      - rate
+        - content
+        - rate
       type: object
       properties:
         content:
@@ -596,42 +579,48 @@ components:
           multipleOf: 0.5
           type: number
           format: float
-    BaseResDto:
+    BaseResponse:
       required:
-      - id
+        - id
       type: object
       properties:
         id:
           type: integer
           format: int64
-    UserResDto:
+    FindUserResponse:
+      description: User Find Response
       required:
-      - email
-      - email_verified
-      - password
-      - username
+        - email
+        - username
+        - provider_type
+        - role_type
+        - image_url
+        - status_message
       type: object
       properties:
         email:
           type: string
-        password:
-          type: string
+          format: email
         username:
           type: string
+        provider_type:
+            $ref: '#/components/schemas/ProviderType'
+        role_type:
+            $ref: '#/components/schemas/RoleType'
         image_url:
           type: string
-        email_verified:
-          type: boolean
-          default: false
+        status_message:
+          type: string
       allOf:
-      - $ref: '#/components/schemas/BaseResDto'
-    FindBeerResDto:
+        - $ref: '#/components/schemas/BaseResponse'
+    FindBeerResponse:
+      description: Beer Find Response
       required:
-      - country
-      - description
-      - name_en
-      - name_ko
-      - volume
+        - description
+        - name_en
+        - name_ko
+        - country
+        - volume
       type: object
       properties:
         name_en:
@@ -641,7 +630,7 @@ components:
         description:
           type: string
         country:
-          $ref: '#/components/schemas/FindCountryResDto'
+          $ref: '#/components/schemas/FindCountryResponse'
         volume:
           minimum: 0.0
           type: number
@@ -649,26 +638,26 @@ components:
         image_url:
           type: string
         category:
-          $ref: '#/components/schemas/FindCategorySupResDto'
+          $ref: '#/components/schemas/FindCategorySupResponse'
         tags:
           type: array
           items:
-            $ref: '#/components/schemas/FindTagResDto'
+            $ref: '#/components/schemas/FindTagResponse'
       example:
-        $ref: '#/components/examples/FindBeerResDto_Example'
+        $ref: '#/components/examples/FindBeerResponse_Example'
       allOf:
-      - $ref: '#/components/schemas/BaseResDto'
-    FindCountryResDto:
+        - $ref: '#/components/schemas/BaseResponse'
+    FindCountryResponse:
       type: object
       properties:
         code:
           type: string
-    FindCategorySupResDto:
+    FindCategorySupResponse:
       required:
-      - description
-      - name_en
-      - name_ko
-      - parent
+        - name_ko
+        - name_en
+        - description
+        - parent
       type: object
       properties:
         name_ko:
@@ -678,12 +667,12 @@ components:
         description:
           type: string
         parent:
-          $ref: '#/components/schemas/FindCategorySupResDto'
+          $ref: '#/components/schemas/FindCategorySupResponse'
       allOf:
-      - $ref: '#/components/schemas/BaseResDto'
-    FindTagResDto:
+        - $ref: '#/components/schemas/BaseResponse'
+    FindTagResponse:
       required:
-      - name
+        - name
       type: object
       properties:
         name_ko:
@@ -691,10 +680,10 @@ components:
         name_en:
           type: string
       allOf:
-      - $ref: '#/components/schemas/BaseResDto'
-    ReviewResDto:
+        - $ref: '#/components/schemas/BaseResponse'
+    ReviewResponse:
       required:
-      - rate
+        - rate
       type: object
       properties:
         content:
@@ -703,7 +692,7 @@ components:
           type: integer
           format: float
       allOf:
-      - $ref: '#/components/schemas/BaseResDto'
+        - $ref: '#/components/schemas/BaseResponse'
   responses:
     Created:
       description: Created.
@@ -713,6 +702,7 @@ components:
       description: Forbidden. Inproper authorization.
     InternalServerError:
       description: Internal server error. Unexpected error.
+
   parameters:
     userId:
       name: userId
@@ -745,8 +735,8 @@ components:
       schema:
         type: array
         example:
-        - 1
-        - 2
+          - 1
+          - 2
         items:
           type: integer
           format: int64
@@ -760,8 +750,8 @@ components:
       schema:
         type: array
         example:
-        - KO
-        - US
+          - KO
+          - US
         items:
           type: string
     volumes:
@@ -774,8 +764,8 @@ components:
       schema:
         type: array
         example:
-        - 4
-        - 8
+          - 4
+          - 8
         items:
           type: integer
     beerId:
@@ -829,20 +819,21 @@ components:
       explode: true
       schema:
         type: integer
+
   examples:
-    UserReqDto_Example:
+    CreateUserRequest_Example:
       value:
         email: beer.lover@email.com
-        password: PWbeer10ver*!
         username: 비어러버
-    UserUpdateReqDto_Example:
+        provider_type: 
+    UpdateUserRequest_Example:
       value:
         username: 퇴근후한캔
-    ReviewCreateReqDto_Example:
+    ReviewCreateRequest_Example:
       value:
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
-    UserResDto_Example:
+    FindUserResponse_Example:
       value:
         id: 1
         email: beer.lover@email.com
@@ -850,7 +841,7 @@ components:
         username: 비어러버
         image_url: "returned_from_server: <base_url>/<file_name>"
         email_verified: true
-    FindBeerResDto_Example:
+    FindBeerResponse_Example:
       value:
         id: 1
         name_ko: 빅 웨이브
@@ -874,24 +865,24 @@ components:
             name_en: Ale
             description: 에일은...
         tags:
-        - id: 1
-          name_ko: 시트라
-          name_en: Citra
-          description: 시트라 홉은...
-    FindCategoryResDto_Example:
+          - id: 1
+            name_ko: 시트라
+            name_en: Citra
+            description: 시트라 홉은...
+    FindCategoryResponse_Example:
       value:
         id: 1
         name: 아메리칸 블론드 에일
         description: This is American Blonde Ale.
-    FindCountryResDto_Example:
+    FindCountryResponse_Example:
       value:
         code: US
-    FindTagResDto_Example:
+    FindTagResponse_Example:
       value:
         id: 1
         name_ko: 사이다
         name_en: Cider
-    ReviewResDto_Example:
+    ReviewResponse_Example:
       value:
         id: 1
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
