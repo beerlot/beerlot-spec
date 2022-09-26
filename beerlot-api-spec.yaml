@@ -281,10 +281,10 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ReviewResponse'
+                  $ref: '#/components/schemas/ReviewPage'
               examples:
-                ReviewsResponse_Example:
-                  $ref: '#/components/examples/ReviewsResponse_Example'
+                ReviewPage_Example:
+                  $ref: '#/components/examples/ReviewPage_Example'
         "404":
           description: Not found. The beer with specified ID was not found.
         "500":
@@ -1094,16 +1094,24 @@ components:
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
         created_at: 2022-09-25T16:19:25Z
-    ReviewsResponse_Example:
+    ReviewPage_Example:
       value:
-      - id: 1
-        content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
-        rate: 5.0
-        created_at: 2022-09-25T16:19:25Z
-      - id: 10
-        content: 생각보다 좀 맹맹했어요ㅠㅠ
-        rate: 3.5
-        created_at: 2022-08-29T11:20:45Z
+        contents:
+        - id: 1
+          content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
+          rate: 5.0
+          created_at: 2022-09-25T16:19:25Z
+        - id: 10
+          content: 생각보다 좀 맹맹했어요ㅠㅠ
+          rate: 3.5
+          created_at: 2022-08-29T11:20:45Z
+        page_request:
+          page: 1
+          size: 1
+          offfset: 0
+        page: 1
+        total_elements: 1
+        total_pages: 1
   securitySchemes:
     password:
       type: oauth2
