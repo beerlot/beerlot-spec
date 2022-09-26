@@ -279,9 +279,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReviewPage'
+                $ref: '#/components/schemas/ReviewPage'
               examples:
                 ReviewPage_Example:
                   $ref: '#/components/examples/ReviewPage_Example'
