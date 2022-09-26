@@ -156,16 +156,7 @@ paths:
       summary: Get one beer
       operationId: findBeerById
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - $ref: '#/components/parameters/beerId'
       responses:
         "200":
           description: OK
@@ -188,32 +179,9 @@ paths:
       summary: Get all reviews specified by beer ID
       operationId: findReviewsByBeerId
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: 1
-      - name: page
-        in: query
-        description: page number
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: size
-        in: query
-        description: size of one page
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
+        - $ref: '#/components/parameters/beerId'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
       responses:
         "200":
           description: Ok.
@@ -234,16 +202,7 @@ paths:
       summary: Create a new review
       operationId: createReview
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: 1
+        - $ref: '#/components/parameters/beerId'
       requestBody:
         content:
           application/json:
@@ -269,16 +228,7 @@ paths:
       summary: Get one review with specified ID
       operationId: findReviewById
       parameters:
-      - name: reviewId
-        in: path
-        description: beer review id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: 1
+        - $ref: '#/components/parameters/reviewId'
       responses:
         "200":
           description: Ok. Get review.
@@ -299,16 +249,7 @@ paths:
       summary: Delete the review
       operationId: deleteReview
       parameters:
-      - name: reviewId
-        in: path
-        description: beer review id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: 1
+        - $ref: '#/components/parameters/reviewId'
       responses:
         "204":
           description: Review deleted.
@@ -326,16 +267,7 @@ paths:
       summary: Update the review
       operationId: updateReview
       parameters:
-      - name: reviewId
-        in: path
-        description: beer review id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - $ref: '#/components/parameters/reviewId'
       requestBody:
         content:
           application/json:
@@ -370,16 +302,7 @@ paths:
       summary: Like the review with specified id
       operationId: createReviewLike
       parameters:
-      - name: reviewId
-        in: path
-        description: beer review id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - $ref: '#/components/parameters/reviewId'
       responses:
         "200":
           description: Already liked.
@@ -397,16 +320,7 @@ paths:
       summary: UnLike the review with specified id
       operationId: deleteReviewLike
       parameters:
-      - name: reviewId
-        in: path
-        description: beer review id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - $ref: '#/components/parameters/reviewId'
       responses:
         "200":
           description: No like found.
@@ -425,16 +339,7 @@ paths:
       summary: Like the beer with specified id
       operationId: createBeerLike
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: 1
+        - $ref: '#/components/parameters/beerId'
       responses:
         "200":
           description: Already liked.
@@ -452,16 +357,7 @@ paths:
       summary: UnLike the beer with specified id
       operationId: deleteBeerLike
       parameters:
-      - name: beerId
-        in: path
-        description: beer id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: 1
+        - $ref: '#/components/parameters/beerId'
       responses:
         "200":
           description: No like found.
@@ -515,16 +411,7 @@ paths:
       summary: Get one category found by category id
       operationId: getCategory
       parameters:
-      - name: categoryId
-        in: path
-        description: beer category id
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-        example: "1"
+        - $ref: '#/components/parameters/categoryId'
       responses:
         "200":
           description: OK
