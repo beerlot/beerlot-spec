@@ -659,6 +659,25 @@ components:
         nextPage:
           type: integer
           format: int32
+    ReviewPage:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewResponse'
+        page_request:
+          $ref: '#/components/schemas/BeerPage_page_request'
+        page:
+          type: integer
+        total_elements:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+        nextPage:
+          type: integer
+          format: int32
     UserCreateRequest:
       required:
       - email
