@@ -776,10 +776,14 @@ components:
       - $ref: '#/components/schemas/BaseResponse'
     BeerResponse:
       required:
+      - category
       - country
       - description
+      - image_url
+      - like_count
       - name_en
       - name_ko
+      - tags
       - volume
       type: object
       properties:
@@ -804,6 +808,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagResponse'
+        likeCount:
+          type: integer
+          format: int64
       description: Beer Find Response
       example:
         $ref: '#/components/examples/BeerResponse_Example'
@@ -1082,6 +1089,7 @@ components:
           name_ko: 시트라
           name_en: Citra
           description: 시트라 홉은...
+        like_count: 13
     CategoryResponse_Example:
       value:
         id: 1
