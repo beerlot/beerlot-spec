@@ -852,6 +852,9 @@ components:
       - $ref: '#/components/schemas/BaseResponse'
     ReviewResponse:
       required:
+      - content
+      - created_at
+      - like_count
       - rate
       type: object
       properties:
@@ -865,6 +868,9 @@ components:
         created_at:
           type: string
           format: date-time
+        like_count:
+          type: integer
+          format: int64
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
     BeerPage_page_request:
