@@ -808,7 +808,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagResponse'
-        likeCount:
+        like_count:
           type: integer
           format: int64
       description: Beer Find Response
