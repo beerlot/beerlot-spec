@@ -224,7 +224,7 @@ paths:
         schema:
           type: integer
           format: int64
-        example: 1
+        example: "1"
       responses:
         "200":
           description: OK
@@ -665,7 +665,8 @@ components:
           items:
             $ref: '#/components/schemas/ReviewResponse'
         page_request:
-          $ref: '#/components/schemas/BeerPage_page_request'
+          type: object
+          format: pageable
         page:
           type: integer
         total_elements:
@@ -689,7 +690,6 @@ components:
         username:
           type: string
         image_url:
-          maxLength: 2097152
           type: string
         provider_type:
           $ref: '#/components/schemas/ProviderType'
@@ -702,7 +702,6 @@ components:
         username:
           type: string
         image_url:
-          maxLength: 2097152
           type: string
         status_message:
           type: string
@@ -720,9 +719,6 @@ components:
           multipleOf: 0.5
           type: number
           format: float
-        image_url:
-          maxLength: 2097152
-          type: string
     ReviewUpdateRequest:
       required:
       - content
@@ -736,9 +732,6 @@ components:
           multipleOf: 0.5
           type: number
           format: float
-        image_url:
-          maxLength: 2097152
-          type: string
     BaseResponse:
       required:
       - id
@@ -767,7 +760,6 @@ components:
         role_type:
           $ref: '#/components/schemas/RoleType'
         image_url:
-          maxLength: 2097152
           type: string
         status_message:
           type: string
@@ -796,7 +788,6 @@ components:
           type: number
           format: float
         image_url:
-          maxLength: 2097152
           type: string
         category:
           $ref: '#/components/schemas/CategorySupResponse'
@@ -869,6 +860,7 @@ components:
           type: integer
         offset:
           type: integer
+      example: null
   responses:
     Created:
       description: Created.
