@@ -6,7 +6,7 @@ info:
 servers:
 - url: https://virtserver.swaggerhub.com/beerlot-contact/beerlot-api-spec/1.0.0
   description: SwaggerHub API Auto Mocking
-- url: https://beerlot-core-ltcpnnhkfa-an.a.run.app/api/v1
+- url: https://beerlot-core-obtg3qwuhq-an.a.run.app/api/v1
   description: DEV
 security:
 - password:
