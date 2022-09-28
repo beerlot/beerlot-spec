@@ -195,6 +195,14 @@ paths:
         explode: true
         schema:
           type: integer
+      - name: sort
+        in: query
+        description: type of sort
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/BeerSortType'
       responses:
         "200":
           description: OK
@@ -638,6 +646,40 @@ components:
       enum:
       - GENERAL
       - ADMIN
+    BeerSortType:
+      type: string
+      enum:
+      - MOST_LIKES
+      - MOST_REVIEWS
+      - HIGH_RATE
+      default: MOST_LIKES
+    PageRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+        offset:
+          type: integer
+          format: int32
+    BasePage:
+      type: object
+      properties:
+        page:
+          type: integer
+        total_elements:
+          type: integer
+          format: int32
+        total_pages:
+          type: integer
+        nextPage:
+          type: integer
+        page_request:
+          $ref: '#/components/schemas/PageRequest'
+        sort:
+          oneOf:
+          - $ref: '#/components/schemas/BeerSortType'
     BeerPage:
       type: object
       properties:
@@ -645,18 +687,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BeerResponse'
-        page_request:
-          $ref: '#/components/schemas/BeerPage_page_request'
-        page:
-          type: integer
-        total_elements:
-          type: integer
-          format: int32
-        total_pages:
-          type: integer
-        nextPage:
-          type: integer
-          format: int32
+      allOf:
+      - $ref: '#/components/schemas/BasePage'
     ReviewPage:
       type: object
       properties:
@@ -664,18 +696,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReviewResponse'
-        page_request:
-          $ref: '#/components/schemas/BeerPage_page_request'
-        page:
-          type: integer
-        total_elements:
-          type: integer
-          format: int32
-        total_pages:
-          type: integer
-        nextPage:
-          type: integer
-          format: int32
+      allOf:
+      - $ref: '#/components/schemas/BasePage'
     UserCreateRequest:
       required:
       - email
@@ -783,6 +805,7 @@ components:
       - like_count
       - name_en
       - name_ko
+      - review_count
       - tags
       - volume
       type: object
@@ -811,6 +834,12 @@ components:
         like_count:
           type: integer
           format: int64
+        review_count:
+          type: integer
+          format: int64
+        rate:
+          type: number
+          format: float
       description: Beer Find Response
       example:
         $ref: '#/components/examples/BeerResponse_Example'
@@ -1007,6 +1036,15 @@ components:
       explode: true
       schema:
         type: integer
+    sort:
+      name: sort
+      in: query
+      description: type of sort
+      required: true
+      style: form
+      explode: true
+      schema:
+        $ref: '#/components/schemas/BeerSortType'
   examples:
     BeerPage_Example:
       value:
@@ -1096,6 +1134,8 @@ components:
           name_en: Citra
           description: 시트라 홉은...
         like_count: 13
+        review_count: 2
+        rate: 4.25
     CategoryResponse_Example:
       value:
         id: 1
