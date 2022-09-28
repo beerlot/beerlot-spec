@@ -130,13 +130,79 @@ paths:
       summary: Get all beers with full search
       operationId: findBeersBySearch
       parameters:
-        - $ref: '#/components/parameters/keyword'
-        - $ref: '#/components/parameters/categories'
-        - $ref: '#/components/parameters/countries'
-        - $ref: '#/components/parameters/volumes'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/size'
-        - $ref: '#/components/parameters/sort'
+      - name: keyword
+        in: query
+        description: Search keyword
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: 골든 에일
+      - name: categories
+        in: query
+        description: Category IDs
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          example:
+          - 1
+          - 2
+          items:
+            type: integer
+            format: int64
+      - name: countries
+        in: query
+        description: Countries
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          example:
+          - KO
+          - US
+          items:
+            type: string
+      - name: volumes
+        in: query
+        description: Beer Alcohol Volume
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          example:
+          - 4
+          - 8
+          items:
+            type: integer
+      - name: page
+        in: query
+        description: page number
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: size
+        in: query
+        description: size of one page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: sort
+        in: query
+        description: type of sort
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/BeerSortType'
       responses:
         "200":
           description: OK
@@ -157,7 +223,16 @@ paths:
       summary: Get one beer
       operationId: findBeerById
       parameters:
-        - $ref: '#/components/parameters/beerId'
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: 1
       responses:
         "200":
           description: OK
@@ -180,9 +255,32 @@ paths:
       summary: Get all reviews specified by beer ID
       operationId: findReviewsByBeerId
       parameters:
-        - $ref: '#/components/parameters/beerId'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/size'
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: 1
+      - name: page
+        in: query
+        description: page number
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: size
+        in: query
+        description: size of one page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
       responses:
         "200":
           description: Ok.
@@ -203,7 +301,16 @@ paths:
       summary: Create a new review
       operationId: createReview
       parameters:
-        - $ref: '#/components/parameters/beerId'
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: 1
       requestBody:
         content:
           application/json:
@@ -229,7 +336,16 @@ paths:
       summary: Get one review with specified ID
       operationId: findReviewById
       parameters:
-        - $ref: '#/components/parameters/reviewId'
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: Ok. Get review.
@@ -250,7 +366,16 @@ paths:
       summary: Delete the review
       operationId: deleteReview
       parameters:
-        - $ref: '#/components/parameters/reviewId'
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "204":
           description: Review deleted.
@@ -268,7 +393,16 @@ paths:
       summary: Update the review
       operationId: updateReview
       parameters:
-        - $ref: '#/components/parameters/reviewId'
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       requestBody:
         content:
           application/json:
@@ -303,7 +437,16 @@ paths:
       summary: Like the review with specified id
       operationId: createReviewLike
       parameters:
-        - $ref: '#/components/parameters/reviewId'
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: Already liked.
@@ -321,7 +464,16 @@ paths:
       summary: UnLike the review with specified id
       operationId: deleteReviewLike
       parameters:
-        - $ref: '#/components/parameters/reviewId'
+      - name: reviewId
+        in: path
+        description: beer review id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: No like found.
@@ -340,7 +492,16 @@ paths:
       summary: Like the beer with specified id
       operationId: createBeerLike
       parameters:
-        - $ref: '#/components/parameters/beerId'
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: 1
       responses:
         "200":
           description: Already liked.
@@ -358,7 +519,16 @@ paths:
       summary: UnLike the beer with specified id
       operationId: deleteBeerLike
       parameters:
-        - $ref: '#/components/parameters/beerId'
+      - name: beerId
+        in: path
+        description: beer id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: 1
       responses:
         "200":
           description: No like found.
@@ -412,7 +582,16 @@ paths:
       summary: Get one category found by category id
       operationId: getCategory
       parameters:
-        - $ref: '#/components/parameters/categoryId'
+      - name: categoryId
+        in: path
+        description: beer category id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+        example: "1"
       responses:
         "200":
           description: OK
@@ -470,9 +649,9 @@ components:
     BeerSortType:
       type: string
       enum:
-        - MOST_LIKES
-        - MOST_REVIEWS
-        - HIGH_RATE
+      - MOST_LIKES
+      - MOST_REVIEWS
+      - HIGH_RATE
       default: MOST_LIKES
     PageRequest:
       type: object
@@ -483,7 +662,7 @@ components:
           type: integer
         sort:
           oneOf:
-            - $ref: '#/components/schemas/BeerSortType'
+          - $ref: '#/components/schemas/BeerSortType'
         offset:
           type: integer
           format: int32
@@ -501,7 +680,6 @@ components:
           type: integer
         page_request:
           $ref: '#/components/schemas/PageRequest'
-        
     BeerPage:
       type: object
       properties:
@@ -510,8 +688,7 @@ components:
           items:
             $ref: '#/components/schemas/BeerResponse'
       allOf:
-        - $ref: '#/components/schemas/BasePage'
-          
+      - $ref: '#/components/schemas/BasePage'
     ReviewPage:
       type: object
       properties:
@@ -520,8 +697,7 @@ components:
           items:
             $ref: '#/components/schemas/ReviewResponse'
       allOf:
-        - $ref: '#/components/schemas/BasePage'
-          
+      - $ref: '#/components/schemas/BasePage'
     UserCreateRequest:
       required:
       - email
@@ -535,8 +711,8 @@ components:
         username:
           type: string
         image_url:
-          type: string
           maxLength: 2097152
+          type: string
         provider_type:
           $ref: '#/components/schemas/ProviderType'
       description: User Signup Form
@@ -548,8 +724,8 @@ components:
         username:
           type: string
         image_url:
-          type: string
           maxLength: 2097152
+          type: string
         status_message:
           type: string
       description: User Profile Update Form
@@ -567,8 +743,8 @@ components:
           type: number
           format: float
         image_url:
-          type: string
           maxLength: 2097152
+          type: string
     ReviewUpdateRequest:
       required:
       - content
@@ -583,8 +759,8 @@ components:
           type: number
           format: float
         image_url:
-          type: string
           maxLength: 2097152
+          type: string
     BaseResponse:
       required:
       - id
@@ -613,8 +789,8 @@ components:
         role_type:
           $ref: '#/components/schemas/RoleType'
         image_url:
-          type: string
           maxLength: 2097152
+          type: string
         status_message:
           type: string
       description: User Response
@@ -622,16 +798,16 @@ components:
       - $ref: '#/components/schemas/BaseResponse'
     BeerResponse:
       required:
+      - category
       - country
       - description
+      - image_url
+      - like_count
       - name_en
       - name_ko
-      - volume
-      - image_url
-      - category
-      - tags
-      - like_count
       - review_count
+      - tags
+      - volume
       type: object
       properties:
         name_en:
@@ -647,8 +823,8 @@ components:
           type: number
           format: float
         image_url:
-          type: string
           maxLength: 2097152
+          type: string
         category:
           $ref: '#/components/schemas/CategorySupResponse'
         tags:
@@ -706,9 +882,9 @@ components:
     ReviewResponse:
       required:
       - content
-      - rate
       - created_at
       - like_count
+      - rate
       type: object
       properties:
         content:
@@ -735,7 +911,6 @@ components:
           type: integer
         offset:
           type: integer
-      example: null
   responses:
     Created:
       description: Created.
