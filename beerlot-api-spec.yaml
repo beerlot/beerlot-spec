@@ -456,14 +456,14 @@ paths:
           format: int64
         example: "1"
       responses:
-        "200":
-          description: Already liked.
         "201":
           description: Like created.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not found. The beer with specified ID was not found.
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -483,14 +483,12 @@ paths:
           format: int64
         example: "1"
       responses:
-        "200":
-          description: No like found.
         "204":
           description: Unlike succeeded.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not found. The beer with specified ID was not found.
+          $ref: '#/components/responses/NotFound'
         "500":
           description: Internal server error. Unexpected error.
   /beers/{beerId}/likes:
@@ -511,14 +509,14 @@ paths:
           format: int64
         example: 1
       responses:
-        "200":
-          description: Already liked.
         "201":
           description: Like created.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not found. The beer with specified ID was not found.
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -538,14 +536,12 @@ paths:
           format: int64
         example: 1
       responses:
-        "200":
-          description: No like found.
         "204":
           description: Unlike succeeded.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not found. The beer with specified ID was not found.
+          $ref: '#/components/responses/NotFound'
         "500":
           description: Internal server error. Unexpected error.
   /categories:
@@ -660,6 +656,7 @@ components:
       - MOST_LIKES
       - MOST_REVIEWS
       - HIGH_RATE
+    
     ReviewSortType:
       type: string
       enum:
@@ -667,6 +664,7 @@ components:
       - MOST_LIKES
       - HIGH_RATE
       - LOW_RATE
+      
     PageRequest:
       type: object
       properties:
@@ -677,6 +675,7 @@ components:
         offset:
           type: integer
           format: int32
+          
     BeerPageRequest:
       type: object
       properties:
@@ -684,6 +683,7 @@ components:
           $ref: '#/components/schemas/BeerSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
+      
     ReviewPageRequest:
       type: object
       properties:
@@ -691,6 +691,7 @@ components:
           $ref: '#/components/schemas/ReviewSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
+    
     BasePage:
       type: object
       properties:
@@ -939,6 +940,10 @@ components:
       description: Unauthorized. Access token is missing or invalid.
     Forbidden:
       description: Forbidden. Inproper authorization.
+    NotFound:
+      description: Not Found. Does not exist.
+    Conflict:
+      description: Conflict. Already exists.
     InternalServerError:
       description: Internal server error. Unexpected error.
   parameters:
