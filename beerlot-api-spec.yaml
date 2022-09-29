@@ -663,6 +663,15 @@ components:
         offset:
           type: integer
           format: int32
+          
+    BeerPageRequest:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/BeerSortType'
+      allOf:
+      - $ref: '#/components/schemas/PageRequest'
+      
     BasePage:
       type: object
       properties:
@@ -683,10 +692,7 @@ components:
           items:
             $ref: '#/components/schemas/BeerResponse'
         page_request:
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/PageRequest'
-            - $ref: '#/components/schemas/BeerSortType'
+          $ref: '#/components/schemas/BeerPageRequest'
       allOf:
       - $ref: '#/components/schemas/BasePage'
     ReviewPage:
@@ -1070,6 +1076,7 @@ components:
           page: 1
           size: 1
           offset: 0
+          sort: MOST_LIKES
         page: 1
         total_elements: 1
         total_pages: 1
