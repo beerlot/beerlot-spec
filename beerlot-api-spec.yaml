@@ -281,6 +281,14 @@ paths:
         explode: true
         schema:
           type: integer
+      - name: sort
+        in: query
+        description: type of sort
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/ReviewSortType'
       responses:
         "200":
           description: Ok.
@@ -652,12 +660,14 @@ components:
       - MOST_LIKES
       - MOST_REVIEWS
       - HIGH_RATE
+    
     ReviewSortType:
       type: string
       enum:
       - RECENTLY_UPDATED
       - MOST_LIKES
       - HIGH_RATE
+
     PageRequest:
       type: object
       properties:
@@ -668,6 +678,7 @@ components:
         offset:
           type: integer
           format: int32
+          
     BeerPageRequest:
       type: object
       properties:
@@ -675,6 +686,7 @@ components:
           $ref: '#/components/schemas/BeerSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
+      
     ReviewPageRequest:
       type: object
       properties:
@@ -682,6 +694,7 @@ components:
           $ref: '#/components/schemas/ReviewSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
+    
     BasePage:
       type: object
       properties:
