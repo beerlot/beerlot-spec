@@ -683,6 +683,7 @@ components:
           items:
             $ref: '#/components/schemas/BeerResponse'
         page_request:
+          type: object
           allOf:
             - $ref: '#/components/schemas/PageRequest'
             - $ref: '#/components/schemas/BeerSortType'
@@ -1068,7 +1069,7 @@ components:
         page_request:
           page: 1
           size: 1
-          offfset: 0
+          offset: 0
         page: 1
         total_elements: 1
         total_pages: 1
@@ -1159,7 +1160,7 @@ components:
         page_request:
           page: 1
           size: 1
-          offfset: 0
+          offset: 0
         page: 1
         total_elements: 1
         total_pages: 1
