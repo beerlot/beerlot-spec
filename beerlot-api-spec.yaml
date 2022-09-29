@@ -248,6 +248,47 @@ paths:
         "500":
           description: Internal server error. Unexpected error.
       security: []
+  /reviews:
+    get:
+      tags:
+      - review
+      summary: Get all reviews
+      operationId: findAllReviews
+      parameters:
+      - name: page
+        in: query
+        description: page number
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: size
+        in: query
+        description: size of one page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: sort
+        in: query
+        description: type of sort
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/ReviewSortType'
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewPage'
+              examples:
+                ReviewPage_Example:
+                  $ref: '#/components/examples/ReviewPage_Example'
   /beers/{beerId}/reviews:
     get:
       tags:
@@ -1057,15 +1098,6 @@ components:
       explode: true
       schema:
         type: integer
-    sort:
-      name: sort
-      in: query
-      description: type of sort
-      required: true
-      style: form
-      explode: true
-      schema:
-        $ref: '#/components/schemas/BeerSortType'
   examples:
     BeerPage_Example:
       value:
@@ -1192,6 +1224,7 @@ components:
           page: 1
           size: 1
           offset: 0
+          sort: MOST_LIKES
         page: 1
         total_elements: 1
         total_pages: 1
