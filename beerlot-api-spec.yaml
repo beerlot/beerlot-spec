@@ -675,11 +675,6 @@ components:
           type: integer
         nextPage:
           type: integer
-        page_request:
-          allOf:
-            - $ref: '#/components/schemas/PageRequest'
-          oneOf:
-            - $ref: '#/components/schemas/BeerSortType'
     BeerPage:
       type: object
       properties:
@@ -687,6 +682,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BeerResponse'
+        page_request:
+          allOf:
+            - $ref: '#/components/schemas/PageRequest'
+            - $ref: '#/components/schemas/BeerSortType'
       allOf:
       - $ref: '#/components/schemas/BasePage'
     ReviewPage:
