@@ -255,9 +255,30 @@ paths:
       summary: Get all reviews
       operationId: findAllReviews
       parameters:
-      - $ref: '#/components/parameters/page'
-      - $ref: '#/components/parameters/size'
-      - $ref: '#/components/parameters/sort'
+        - name: page
+          in: query
+          description: page number
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: size
+          in: query
+          description: size of one page
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: type of sort
+          required: true
+          style: form
+          explode: true
+          schema:
+            $ref: '#/components/schemas/ReviewSortType'
       responses:
         "200":
           description: Ok.
@@ -1082,17 +1103,7 @@ components:
       explode: true
       schema:
         type: integer
-    sort:
-      name: sort
-      in: query
-      description: type of sort
-      required: true
-      style: form
-      explode: true
-      schema:
-        oneOf:
-        - $ref: '#/components/schemas/BeerSortType'
-        - $ref: '#/components/schemas/ReviewSortType'
+
   examples:
     BeerPage_Example:
       value:
@@ -1219,6 +1230,7 @@ components:
           page: 1
           size: 1
           offset: 0
+          sort: MOST_LIKES
         page: 1
         total_elements: 1
         total_pages: 1
