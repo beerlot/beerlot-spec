@@ -255,30 +255,30 @@ paths:
       summary: Get all reviews
       operationId: findAllReviews
       parameters:
-      - name: page
-        in: query
-        description: page number
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: size
-        in: query
-        description: size of one page
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: sort
-        in: query
-        description: type of sort
-        required: true
-        style: form
-        explode: true
-        schema:
-          $ref: '#/components/schemas/ReviewSortType'
+        - name: page
+          in: query
+          description: page number
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: size
+          in: query
+          description: size of one page
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: type of sort
+          required: true
+          style: form
+          explode: true
+          schema:
+            $ref: '#/components/schemas/ReviewSortType'
       responses:
         "200":
           description: Ok.
@@ -290,7 +290,7 @@ paths:
                 ReviewPage_Example:
                   $ref: '#/components/examples/ReviewPage_Example'
         "500":
-          description: Internal server error. Unexpected error.
+          $ref: '#/components/responses/InternalServerError'
   /beers/{beerId}/reviews:
     get:
       tags:
@@ -504,9 +504,9 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not Found. Does not exist.
+          $ref: '#/components/responses/NotFound'
         "409":
-          description: Conflict. Already exists.
+          $ref: '#/components/responses/Conflict'
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -531,7 +531,7 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not Found. Does not exist.
+          $ref: '#/components/responses/NotFound'
         "500":
           description: Internal server error. Unexpected error.
   /beers/{beerId}/likes:
@@ -557,9 +557,9 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not Found. Does not exist.
+          $ref: '#/components/responses/NotFound'
         "409":
-          description: Conflict. Already exists.
+          $ref: '#/components/responses/Conflict'
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -584,7 +584,7 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not Found. Does not exist.
+          $ref: '#/components/responses/NotFound'
         "500":
           description: Internal server error. Unexpected error.
   /categories:
@@ -699,6 +699,7 @@ components:
       - MOST_LIKES
       - MOST_REVIEWS
       - HIGH_RATE
+    
     ReviewSortType:
       type: string
       enum:
@@ -706,6 +707,7 @@ components:
       - MOST_LIKES
       - HIGH_RATE
       - LOW_RATE
+      
     PageRequest:
       type: object
       properties:
@@ -716,6 +718,7 @@ components:
         offset:
           type: integer
           format: int32
+          
     BeerPageRequest:
       type: object
       properties:
@@ -723,6 +726,7 @@ components:
           $ref: '#/components/schemas/BeerSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
+      
     ReviewPageRequest:
       type: object
       properties:
@@ -730,6 +734,7 @@ components:
           $ref: '#/components/schemas/ReviewSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
+    
     BasePage:
       type: object
       properties:
@@ -951,6 +956,7 @@ components:
       - created_at
       - like_count
       - rate
+      - beer_id
       type: object
       properties:
         content:
@@ -967,6 +973,9 @@ components:
           type: string
           format: date-time
         like_count:
+          type: integer
+          format: int64
+        beer_id:
           type: integer
           format: int64
       allOf:
@@ -1100,6 +1109,7 @@ components:
       explode: true
       schema:
         type: integer
+
   examples:
     BeerPage_Example:
       value:
@@ -1130,6 +1140,7 @@ components:
             name_ko: 시트라
             name_en: Citra
             description: 시트라 홉은...
+          beer_id: 1
         page_request:
           page: 1
           size: 1
@@ -1192,6 +1203,7 @@ components:
         like_count: 13
         review_count: 2
         rate: 4.25
+        beer_id: 1
     CategoryResponse_Example:
       value:
         id: 1
