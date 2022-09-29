@@ -281,6 +281,14 @@ paths:
         explode: true
         schema:
           type: integer
+      - name: sort
+        in: query
+        description: type of sort
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/ReviewSortType'
       responses:
         "200":
           description: Ok.
