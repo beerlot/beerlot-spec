@@ -456,14 +456,14 @@ paths:
           format: int64
         example: "1"
       responses:
-        "200":
-          description: Already liked.
         "201":
           description: Like created.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not found. The beer with specified ID was not found.
+          description: Not Found. Does not exist.
+        "409":
+          description: Conflict. Already exists.
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -483,14 +483,12 @@ paths:
           format: int64
         example: "1"
       responses:
-        "200":
-          description: No like found.
         "204":
           description: Unlike succeeded.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not found. The beer with specified ID was not found.
+          description: Not Found. Does not exist.
         "500":
           description: Internal server error. Unexpected error.
   /beers/{beerId}/likes:
@@ -511,14 +509,14 @@ paths:
           format: int64
         example: 1
       responses:
-        "200":
-          description: Already liked.
         "201":
           description: Like created.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not found. The beer with specified ID was not found.
+          description: Not Found. Does not exist.
+        "409":
+          description: Conflict. Already exists.
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -538,14 +536,12 @@ paths:
           format: int64
         example: 1
       responses:
-        "200":
-          description: No like found.
         "204":
           description: Unlike succeeded.
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not found. The beer with specified ID was not found.
+          description: Not Found. Does not exist.
         "500":
           description: Internal server error. Unexpected error.
   /categories:
@@ -939,6 +935,10 @@ components:
       description: Unauthorized. Access token is missing or invalid.
     Forbidden:
       description: Forbidden. Inproper authorization.
+    NotFound:
+      description: Not Found. Does not exist.
+    Conflict:
+      description: Conflict. Already exists.
     InternalServerError:
       description: Internal server error. Unexpected error.
   parameters:
