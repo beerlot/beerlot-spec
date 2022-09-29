@@ -248,6 +248,26 @@ paths:
         "500":
           description: Internal server error. Unexpected error.
       security: []
+  /reviews:
+    get:
+      tags:
+      - review
+      summary: Get all reviews
+      operationId: findAllReviews
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/size'
+      - $ref: '#/components/parameters/sort'
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewPage'
+              examples:
+                ReviewPage_Example:
+                  $ref: '#/components/examples/ReviewPage_Example'
   /beers/{beerId}/reviews:
     get:
       tags:
@@ -461,9 +481,9 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not Found. Does not exist.
+          $ref: '#/components/responses/NotFound'
         "409":
-          description: Conflict. Already exists.
+          $ref: '#/components/responses/Conflict'
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -488,7 +508,7 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not Found. Does not exist.
+          $ref: '#/components/responses/NotFound'
         "500":
           description: Internal server error. Unexpected error.
   /beers/{beerId}/likes:
@@ -514,9 +534,9 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not Found. Does not exist.
+          $ref: '#/components/responses/NotFound'
         "409":
-          description: Conflict. Already exists.
+          $ref: '#/components/responses/Conflict'
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -541,7 +561,7 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          description: Not Found. Does not exist.
+          $ref: '#/components/responses/NotFound'
         "500":
           description: Internal server error. Unexpected error.
   /categories:
@@ -656,6 +676,7 @@ components:
       - MOST_LIKES
       - MOST_REVIEWS
       - HIGH_RATE
+    
     ReviewSortType:
       type: string
       enum:
@@ -663,6 +684,7 @@ components:
       - MOST_LIKES
       - HIGH_RATE
       - LOW_RATE
+      
     PageRequest:
       type: object
       properties:
@@ -673,6 +695,7 @@ components:
         offset:
           type: integer
           format: int32
+          
     BeerPageRequest:
       type: object
       properties:
@@ -680,6 +703,7 @@ components:
           $ref: '#/components/schemas/BeerSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
+      
     ReviewPageRequest:
       type: object
       properties:
@@ -687,6 +711,7 @@ components:
           $ref: '#/components/schemas/ReviewSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
+    
     BasePage:
       type: object
       properties:
@@ -1065,7 +1090,9 @@ components:
       style: form
       explode: true
       schema:
-        $ref: '#/components/schemas/BeerSortType'
+        oneOf:
+        - $ref: '#/components/schemas/BeerSortType'
+        - $ref: '#/components/schemas/ReviewSortType'
   examples:
     BeerPage_Example:
       value:
