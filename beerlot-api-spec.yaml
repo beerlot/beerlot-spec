@@ -289,6 +289,8 @@ paths:
               examples:
                 ReviewPage_Example:
                   $ref: '#/components/examples/ReviewPage_Example'
+        "500":
+          description: Internal server error. Unexpected error.
   /beers/{beerId}/reviews:
     get:
       tags:
@@ -945,6 +947,7 @@ components:
       - $ref: '#/components/schemas/BaseResponse'
     ReviewResponse:
       required:
+      - beer_id
       - content
       - created_at
       - like_count
@@ -965,6 +968,9 @@ components:
           type: string
           format: date-time
         like_count:
+          type: integer
+          format: int64
+        beer_id:
           type: integer
           format: int64
       allOf:
@@ -1128,6 +1134,7 @@ components:
             name_ko: 시트라
             name_en: Citra
             description: 시트라 홉은...
+          beer_id: 1
         page_request:
           page: 1
           size: 1
@@ -1190,6 +1197,7 @@ components:
         like_count: 13
         review_count: 2
         rate: 4.25
+        beer_id: 1
     CategoryResponse_Example:
       value:
         id: 1
