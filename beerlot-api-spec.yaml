@@ -461,9 +461,9 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          $ref: '#/components/responses/NotFound'
+          description: Not Found. Does not exist.
         "409":
-          $ref: '#/components/responses/Conflict'
+          description: Conflict. Already exists.
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -488,7 +488,7 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          $ref: '#/components/responses/NotFound'
+          description: Not Found. Does not exist.
         "500":
           description: Internal server error. Unexpected error.
   /beers/{beerId}/likes:
@@ -514,9 +514,9 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          $ref: '#/components/responses/NotFound'
+          description: Not Found. Does not exist.
         "409":
-          $ref: '#/components/responses/Conflict'
+          description: Conflict. Already exists.
         "500":
           description: Internal server error. Unexpected error.
     delete:
@@ -541,7 +541,7 @@ paths:
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "404":
-          $ref: '#/components/responses/NotFound'
+          description: Not Found. Does not exist.
         "500":
           description: Internal server error. Unexpected error.
   /categories:
@@ -656,7 +656,6 @@ components:
       - MOST_LIKES
       - MOST_REVIEWS
       - HIGH_RATE
-    
     ReviewSortType:
       type: string
       enum:
@@ -664,7 +663,6 @@ components:
       - MOST_LIKES
       - HIGH_RATE
       - LOW_RATE
-      
     PageRequest:
       type: object
       properties:
@@ -675,7 +673,6 @@ components:
         offset:
           type: integer
           format: int32
-          
     BeerPageRequest:
       type: object
       properties:
@@ -683,7 +680,6 @@ components:
           $ref: '#/components/schemas/BeerSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
-      
     ReviewPageRequest:
       type: object
       properties:
@@ -691,7 +687,6 @@ components:
           $ref: '#/components/schemas/ReviewSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
-    
     BasePage:
       type: object
       properties:
