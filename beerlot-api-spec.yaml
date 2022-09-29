@@ -652,6 +652,12 @@ components:
       - MOST_LIKES
       - MOST_REVIEWS
       - HIGH_RATE
+    ReviewSortType:
+      type: string
+      enum:
+      - RECENTLY_UPDATED
+      - MOST_LIKES
+      - HIGH_RATE
     PageRequest:
       type: object
       properties:
@@ -667,6 +673,13 @@ components:
       properties:
         sort:
           $ref: '#/components/schemas/BeerSortType'
+      allOf:
+      - $ref: '#/components/schemas/PageRequest'
+    ReviewPageRequest:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/ReviewSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
     BasePage:
@@ -699,6 +712,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReviewResponse'
+        page_request:
+          $ref: '#/components/schemas/ReviewPageRequest'
       allOf:
       - $ref: '#/components/schemas/BasePage'
     UserCreateRequest:
@@ -898,6 +913,9 @@ components:
           type: number
           format: float
         created_at:
+          type: string
+          format: date-time
+        updated_at:
           type: string
           format: date-time
         like_count:
