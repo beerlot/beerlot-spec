@@ -652,7 +652,6 @@ components:
       - MOST_LIKES
       - MOST_REVIEWS
       - HIGH_RATE
-      default: MOST_LIKES
     PageRequest:
       type: object
       properties:
@@ -663,6 +662,13 @@ components:
         offset:
           type: integer
           format: int32
+    BeerPageRequest:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/BeerSortType'
+      allOf:
+      - $ref: '#/components/schemas/PageRequest'
     BasePage:
       type: object
       properties:
@@ -675,11 +681,6 @@ components:
           type: integer
         nextPage:
           type: integer
-        page_request:
-          $ref: '#/components/schemas/PageRequest'
-        sort:
-          oneOf:
-          - $ref: '#/components/schemas/BeerSortType'
     BeerPage:
       type: object
       properties:
@@ -687,6 +688,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BeerResponse'
+        page_request:
+          $ref: '#/components/schemas/BeerPageRequest'
       allOf:
       - $ref: '#/components/schemas/BasePage'
     ReviewPage:
@@ -902,15 +905,6 @@ components:
           format: int64
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
-    BeerPage_page_request:
-      type: object
-      properties:
-        page:
-          type: integer
-        size:
-          type: integer
-        offset:
-          type: integer
   responses:
     Created:
       description: Created.
@@ -1078,7 +1072,8 @@ components:
         page_request:
           page: 1
           size: 1
-          offfset: 0
+          offset: 0
+          sort: MOST_LIKES
         page: 1
         total_elements: 1
         total_pages: 1
@@ -1169,7 +1164,7 @@ components:
         page_request:
           page: 1
           size: 1
-          offfset: 0
+          offset: 0
         page: 1
         total_elements: 1
         total_pages: 1
