@@ -652,7 +652,6 @@ components:
       - MOST_LIKES
       - MOST_REVIEWS
       - HIGH_RATE
-
     PageRequest:
       type: object
       properties:
@@ -663,7 +662,6 @@ components:
         offset:
           type: integer
           format: int32
-          
     BeerPageRequest:
       type: object
       properties:
@@ -671,7 +669,6 @@ components:
           $ref: '#/components/schemas/BeerSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
-      
     BasePage:
       type: object
       properties:
