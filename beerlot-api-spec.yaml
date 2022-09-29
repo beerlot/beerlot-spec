@@ -652,6 +652,14 @@ components:
       - MOST_LIKES
       - MOST_REVIEWS
       - HIGH_RATE
+    
+    ReviewSortType:
+      type: string
+      enum:
+      - RECENTLY_UPDATED
+      - MOST_LIKES
+      - HIGH_RATE
+
     PageRequest:
       type: object
       properties:
@@ -662,6 +670,7 @@ components:
         offset:
           type: integer
           format: int32
+          
     BeerPageRequest:
       type: object
       properties:
@@ -669,6 +678,15 @@ components:
           $ref: '#/components/schemas/BeerSortType'
       allOf:
       - $ref: '#/components/schemas/PageRequest'
+      
+    ReviewPageRequest:
+      type: object
+      properties:
+        sort:
+          $ref: '#/components/schemas/ReviewSortType'
+      allOf:
+      - $ref: '#/components/schemas/PageRequest'
+    
     BasePage:
       type: object
       properties:
@@ -699,6 +717,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReviewResponse'
+        page_request:
+          $ref: '#/components/schemas/ReviewPageRequest'
       allOf:
       - $ref: '#/components/schemas/BasePage'
     UserCreateRequest:
