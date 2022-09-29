@@ -666,6 +666,7 @@ components:
       - RECENTLY_UPDATED
       - MOST_LIKES
       - HIGH_RATE
+      - LOW_RATE
     PageRequest:
       type: object
       properties:
