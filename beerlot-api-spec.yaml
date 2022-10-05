@@ -143,7 +143,6 @@ paths:
         in: query
         description: Category IDs
         required: false
-        explode: true
         schema:
           type: array
           example:
