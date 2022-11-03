@@ -25,10 +25,10 @@ tags:
   description: beer review like management
 - name: beer like
   description: beer like management
-- name: beer category
-  description: beer category management
-- name: beer tag
-  description: beer tag management
+- name: category
+  description: category management
+- name: tag
+  description: tag management
 paths:
   /signup:
     post:
@@ -641,7 +641,7 @@ paths:
   /categories:
     get:
       tags:
-      - beer category
+      - category
       summary: Get all categories
       operationId: getCategories
       responses:
@@ -676,13 +676,13 @@ paths:
   /categories/{categoryId}:
     get:
       tags:
-      - beer category
+      - category
       summary: Get one category found by category id
       operationId: getCategory
       parameters:
       - name: categoryId
         in: path
-        description: beer category id
+        description: category id
         required: true
         style: simple
         explode: false
@@ -708,13 +708,13 @@ paths:
   /tags/{tagId}:
     get:
       tags:
-      - beer tag
+      - tag
       summary: Get one beer tag
       operationId: findTagById
       parameters:
       - name: tagId
         in: path
-        description: beer tag id
+        description: tag id
         required: true
         style: simple
         explode: false
@@ -1130,7 +1130,7 @@ components:
     categoryId:
       name: categoryId
       in: path
-      description: beer category id
+      description: category id
       required: true
       style: simple
       explode: false
@@ -1141,7 +1141,7 @@ components:
     tagId:
       name: tagId
       in: path
-      description: beer tag id
+      description: tag id
       required: true
       style: simple
       explode: false
