@@ -30,6 +30,31 @@ tags:
 - name: tag
   description: tag management
 paths:
+  /redirect/{providerType}:
+    get:
+      tags:
+      - auth
+      summary: Redirect to provider's authorization server
+      operationId: redirect
+      parameters:
+      - name: providerType
+        in: path
+        description: OAuth Provider Type
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/ProviderType'
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedirectResponse'
+              examples:
+                RedirectResponse_Example:
+                  $ref: '#/components/examples/RedirectResponse_Example'
   /signup:
     post:
       tags:
@@ -891,6 +916,13 @@ components:
         id:
           type: integer
           format: int64
+    RedirectResponse:
+      required:
+      - redirect_url
+      type: object
+      properties:
+        redirect_url:
+          type: string
     UserResponse:
       required:
       - email
@@ -1052,6 +1084,15 @@ components:
     InternalServerError:
       description: Internal server error. Unexpected error.
   parameters:
+    providerType:
+      name: providerType
+      in: path
+      description: OAuth Provider Type
+      required: true
+      style: simple
+      explode: false
+      schema:
+        $ref: '#/components/schemas/ProviderType'
     userId:
       name: userId
       in: path
@@ -1179,6 +1220,9 @@ components:
       schema:
         type: integer
   examples:
+    RedirectResponse_Example:
+      value:
+        redirect_url: https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=https://our.backend.com/token&client_id=client_id
     BeerPage_Example:
       value:
         contents:
