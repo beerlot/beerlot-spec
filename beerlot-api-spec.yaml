@@ -30,7 +30,7 @@ tags:
 - name: tag
   description: tag management
 paths:
-  /redirect/{providerType}:
+  /auth/redirect/{providerType}:
     get:
       tags:
       - auth
