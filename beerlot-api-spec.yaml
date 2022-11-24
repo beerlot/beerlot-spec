@@ -30,39 +30,39 @@ tags:
 - name: tag
   description: tag management
 paths:
-  /auth/redirect/{providerType}:
+  /auth/redirect/{OAuthProviderType}:
     get:
       tags:
       - auth
       summary: Redirect to provider's authorization server
       operationId: redirect
       parameters:
-      - name: providerType
+      - name: OAuthProviderType
         in: path
         description: OAuth Provider Type
         required: true
         style: simple
         explode: false
         schema:
-          $ref: '#/components/schemas/ProviderType'
+          $ref: '#/components/schemas/OAuthProviderType'
       responses:
         "303":
           description: Redirected.
-  /auth/{providerType}/token:
+  /auth/{OAuthProviderType}/token:
     get:
       tags:
       - auth
       summary: Request token to provider's authorization server
       operationId: requestToken
       parameters:
-      - name: providerType
+      - name: OAuthProviderType
         in: path
         description: OAuth Provider Type
         required: true
         style: simple
         explode: false
         schema:
-          $ref: '#/components/schemas/ProviderType'
+          $ref: '#/components/schemas/OAuthProviderType'
       - name: code
         in: query
         description: Authorization Code
@@ -782,13 +782,10 @@ paths:
       security: []
 components:
   schemas:
-    ProviderType:
+    OAuthProviderType:
       type: string
       enum:
-      - FACEBOOK
       - GOOGLE
-      - KAKAO
-      - NAVER
     RoleType:
       type: string
       enum:
@@ -881,7 +878,7 @@ components:
           maxLength: 2097152
           type: string
         provider_type:
-          $ref: '#/components/schemas/ProviderType'
+          $ref: '#/components/schemas/OAuthProviderType'
       description: User Signup Form
     UserUpdateRequest:
       required:
@@ -952,7 +949,7 @@ components:
         username:
           type: string
         provider_type:
-          $ref: '#/components/schemas/ProviderType'
+          $ref: '#/components/schemas/OAuthProviderType'
         role_type:
           $ref: '#/components/schemas/RoleType'
         image_url:
@@ -1107,15 +1104,15 @@ components:
       schema:
         type: string
       example: 4%2F0AfgeXvvXBD61wINRwaPKfudciAi7fIjHiTL48VS_tWR06hFWseMJ7iErcrIyXkrWZ0zA5g
-    providerType:
-      name: providerType
+    OAuthProviderType:
+      name: OAuthProviderType
       in: path
       description: OAuth Provider Type
       required: true
       style: simple
       explode: false
       schema:
-        $ref: '#/components/schemas/ProviderType'
+        $ref: '#/components/schemas/OAuthProviderType'
     userId:
       name: userId
       in: path
