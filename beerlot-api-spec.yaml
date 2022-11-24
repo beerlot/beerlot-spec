@@ -784,8 +784,6 @@ components:
   schemas:
     OAuthProviderType:
       type: string
-      enum:
-      - GOOGLE
     RoleType:
       type: string
       enum:
