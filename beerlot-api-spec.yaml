@@ -48,6 +48,24 @@ paths:
       responses:
         "303":
           description: Redirected.
+  /auth/{providerType}/token:
+    get:
+      tags:
+      - auth
+      summary: Request token to provider's authorization server
+      operationId: requestToken
+      parameters:
+      - name: providerType
+        in: path
+        description: OAuth Provider Type
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/ProviderType'
+      responses:
+        "303":
+          description: Redirected.
   /signup:
     post:
       tags:
