@@ -48,12 +48,12 @@ paths:
       responses:
         "303":
           description: Redirected.
-  /auth/{providerType}/token:
+  /auth/{providerType}/login:
     get:
       tags:
       - auth
-      summary: Request token to provider's authorization server
-      operationId: requestToken
+      summary: Login
+      operationId: login
       parameters:
       - name: providerType
         in: path
@@ -73,8 +73,12 @@ paths:
           type: string
         example: 4%2F0AfgeXvvXBD61wINRwaPKfudciAi7fIjHiTL48VS_tWR06hFWseMJ7iErcrIyXkrWZ0zA5g
       responses:
-        "303":
-          description: Redirected.
+        "200":
+          description: Success.
+        "401":
+          description: Unauthorized. Access token is missing or invalid.
+        "500":
+          description: Internal server error. Unexpected error.
   /signup:
     post:
       tags:
