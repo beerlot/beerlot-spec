@@ -35,7 +35,7 @@ paths:
       tags:
       - auth
       summary: Redirect to provider's authorization server
-      operationId: redirect
+      operationId: authorize
       parameters:
       - name: providerType
         in: path
