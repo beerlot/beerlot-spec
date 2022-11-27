@@ -30,7 +30,7 @@ tags:
 - name: tag
   description: tag management
 paths:
-  /auth/redirect/{providerType}:
+  /auth/authorize/{providerType}:
     get:
       tags:
       - auth
@@ -48,7 +48,7 @@ paths:
       responses:
         "303":
           description: Redirected.
-  /auth/{providerType}/login:
+  /auth/login/{providerType}:
     get:
       tags:
       - auth
@@ -73,31 +73,40 @@ paths:
           type: string
         example: 4%2F0AfgeXvvXBD61wINRwaPKfudciAi7fIjHiTL48VS_tWR06hFWseMJ7iErcrIyXkrWZ0zA5g
       responses:
-        "200":
-          description: Success.
+        "302":
+          description: Unregistered User. Redirect to frontend.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthUserResponse'
+              examples:
+                UserRes_Example:
+                  $ref: '#/components/examples/OAuthUserResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
           description: Internal server error. Unexpected error.
-  /signup:
+  /auth/signup:
     post:
       tags:
       - auth
       summary: Signup User
-      operationId: createUser
+      operationId: signUp
       requestBody:
         description: User Signup Form
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserCreateRequest'
+              $ref: '#/components/schemas/MemberCreateRequest'
             examples:
-              UserCreateRequest_Example:
-                $ref: '#/components/examples/UserCreateRequest_Example'
+              MemberCreateRequest_Example:
+                $ref: '#/components/examples/MemberCreateRequest_Example'
         required: true
       responses:
         "201":
           description: Created.
+        "409":
+          description: Conflict. Already member.
         "500":
           description: Internal server error. Unexpected error.
   /users:
@@ -864,7 +873,7 @@ components:
           $ref: '#/components/schemas/ReviewPageRequest'
       allOf:
       - $ref: '#/components/schemas/BasePage'
-    UserCreateRequest:
+    MemberCreateRequest:
       required:
       - email
       - provider_type
@@ -881,6 +890,8 @@ components:
           type: string
         provider_type:
           $ref: '#/components/schemas/ProviderType'
+        status_message:
+          type: string
       description: User Signup Form
     UserUpdateRequest:
       required:
@@ -962,6 +973,26 @@ components:
       description: User Response
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
+    OAuthUserResponse:
+      required:
+      - email
+      - image_url
+      - provider_type
+      - role_type
+      - username
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        username:
+          type: string
+        provider_type:
+          $ref: '#/components/schemas/ProviderType'
+        role_type:
+          $ref: '#/components/schemas/RoleType'
+        image_url:
+          type: string
     BeerResponse:
       required:
       - category
@@ -1242,6 +1273,13 @@ components:
       schema:
         type: integer
   examples:
+    OAuthUserResponse_Example:
+      value:
+        email: beer.lover@email.com
+        username: BeerLover
+        image_url: https://beerlot.com/profile_image_url
+        provider_type: GOOGLE
+        role_type: GENERAL
     BeerPage_Example:
       value:
         contents:
@@ -1280,10 +1318,13 @@ components:
         page: 1
         total_elements: 1
         total_pages: 1
-    UserCreateRequest_Example:
+    MemberCreateRequest_Example:
       value:
         email: beer.lover@email.com
         username: 비어러버
+        providerType: GOOGLE
+        image_url: https://beerlot.com/profile_image_url
+        statusMessage: Great day to drink beers
     UserUpdateRequest_Example:
       value:
         username: 퇴근후한캔
