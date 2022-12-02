@@ -797,6 +797,11 @@ components:
   schemas:
     ProviderType:
       type: string
+      enum:
+      - GOOGLE
+      - FACEBOOK
+      - KAKAO
+      - NAVER
     RoleType:
       type: string
       enum:
