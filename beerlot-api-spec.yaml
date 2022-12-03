@@ -81,11 +81,14 @@ paths:
                 $ref: '#/components/schemas/OAuthUserResponse'
               examples:
                 UserRes_Example:
+                  value: null
                   $ref: '#/components/examples/OAuthUserResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
           description: Internal server error. Unexpected error.
+      x-http-servlet-request: true
+      x-http-servlet-response: true
   /auth/signup:
     post:
       tags:
@@ -100,6 +103,7 @@ paths:
               $ref: '#/components/schemas/MemberCreateRequest'
             examples:
               MemberCreateRequest_Example:
+                value: null
                 $ref: '#/components/examples/MemberCreateRequest_Example'
         required: true
       responses:
@@ -109,6 +113,8 @@ paths:
           description: Conflict. Already member.
         "500":
           description: Internal server error. Unexpected error.
+      x-http-servlet-request: true
+      x-http-servlet-response: true
   /users:
     get:
       tags:
@@ -145,6 +151,7 @@ paths:
               $ref: '#/components/schemas/UserUpdateRequest'
             examples:
               UserUpdateRequest_Example:
+                value: null
                 $ref: '#/components/examples/UserUpdateRequest_Example'
         required: true
       responses:
@@ -156,6 +163,7 @@ paths:
                 $ref: '#/components/schemas/UserResponse'
               examples:
                 UserRes_Example:
+                  value: null
                   $ref: '#/components/examples/UserResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
@@ -176,6 +184,7 @@ paths:
                 $ref: '#/components/schemas/UserResponse'
               examples:
                 UserRes_Example:
+                  value: null
                   $ref: '#/components/examples/UserResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
@@ -270,6 +279,7 @@ paths:
                 $ref: '#/components/schemas/BeerPage'
               examples:
                 BeerPage_Example:
+                  value: null
                   $ref: '#/components/examples/BeerPage_Example'
         "500":
           description: Internal server error. Unexpected error.
@@ -351,6 +361,7 @@ paths:
                 $ref: '#/components/schemas/BeerResponse'
               examples:
                 BeerRes_Example:
+                  value: null
                   $ref: '#/components/examples/BeerResponse_Example'
         "404":
           description: Not found. The beer with specified ID was not found.
@@ -397,6 +408,7 @@ paths:
                 $ref: '#/components/schemas/ReviewPage'
               examples:
                 ReviewPage_Example:
+                  value: null
                   $ref: '#/components/examples/ReviewPage_Example'
         "500":
           description: Internal server error. Unexpected error.
@@ -450,6 +462,7 @@ paths:
                 $ref: '#/components/schemas/ReviewPage'
               examples:
                 ReviewPage_Example:
+                  value: null
                   $ref: '#/components/examples/ReviewPage_Example'
         "404":
           description: Not found. The beer with specified ID was not found.
@@ -478,6 +491,7 @@ paths:
               $ref: '#/components/schemas/ReviewCreateRequest'
             examples:
               ReviewCreateRequest_Example:
+                value: null
                 $ref: '#/components/examples/ReviewCreateRequest_Example'
         required: true
       responses:
@@ -515,6 +529,7 @@ paths:
                 $ref: '#/components/schemas/ReviewResponse'
               examples:
                 ReviewResponse_Example:
+                  value: null
                   $ref: '#/components/examples/ReviewResponse_Example'
         "404":
           description: Not found. The review with specified ID was not found.
@@ -570,6 +585,7 @@ paths:
               $ref: '#/components/schemas/ReviewUpdateRequest'
             examples:
               ReviewUpdateRequest_Example:
+                value: null
                 $ref: '#/components/examples/ReviewUpdateRequest_Example'
         required: true
       responses:
@@ -581,6 +597,7 @@ paths:
                 $ref: '#/components/schemas/ReviewResponse'
               examples:
                 ReviewResponse_Example:
+                  value: null
                   $ref: '#/components/examples/ReviewResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
@@ -757,6 +774,7 @@ paths:
                 $ref: '#/components/schemas/CategorySupResponse'
               examples:
                 CategoryResponse_Example:
+                  value: null
                   $ref: '#/components/examples/CategoryResponse_Example'
         "404":
           description: Not found. The category with specified ID was not found.
@@ -789,6 +807,7 @@ paths:
                 $ref: '#/components/schemas/TagResponse'
               examples:
                 TagResponse_Example:
+                  value: null
                   $ref: '#/components/examples/TagResponse_Example'
         "500":
           description: Internal server error. Unexpected error.
