@@ -29,8 +29,6 @@ tags:
   description: category management
 - name: tag
   description: tag management
-- name: do not care
-  description: not for consumption
 paths:
   /auth/authorize/{providerType}:
     get:
@@ -53,7 +51,7 @@ paths:
   /auth/login/{providerType}:
     get:
       tags:
-      - do not care
+      - auth
       summary: Login
       operationId: login
       parameters:
