@@ -73,8 +73,10 @@ paths:
           type: string
         example: 4%2F0AfgeXvvXBD61wINRwaPKfudciAi7fIjHiTL48VS_tWR06hFWseMJ7iErcrIyXkrWZ0zA5g
       responses:
-        "302":
-          description: Unregistered User. Redirect to frontend.
+        "200":
+          description: Login Succeded.
+        "204":
+          description: Unregistered User.
           content:
             application/json:
               schema:
