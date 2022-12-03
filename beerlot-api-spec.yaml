@@ -48,47 +48,6 @@ paths:
       responses:
         "303":
           description: Redirected.
-  /auth/login/{providerType}:
-    get:
-      tags:
-      - auth
-      summary: Login
-      operationId: login
-      parameters:
-      - name: providerType
-        in: path
-        description: OAuth Provider Type
-        required: true
-        style: simple
-        explode: false
-        schema:
-          $ref: '#/components/schemas/ProviderType'
-      - name: code
-        in: query
-        description: Authorization Code
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-        example: 4%2F0AfgeXvvXBD61wINRwaPKfudciAi7fIjHiTL48VS_tWR06hFWseMJ7iErcrIyXkrWZ0zA5g
-      responses:
-        "302":
-          description: Unregistered User. Redirect to frontend.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OAuthUserResponse'
-              examples:
-                UserRes_Example:
-                  value: null
-                  $ref: '#/components/examples/OAuthUserResponse_Example'
-        "401":
-          description: Unauthorized. Access token is missing or invalid.
-        "500":
-          description: Internal server error. Unexpected error.
-      x-http-servlet-request: true
-      x-http-servlet-response: true
   /auth/signup:
     post:
       tags:
