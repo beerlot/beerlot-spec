@@ -13,10 +13,8 @@ security:
   - read
   - write
 tags:
-- name: auth
-  description: auth management
-- name: user
-  description: user management
+- name: member
+  description: member management
 - name: beer
   description: beer management
 - name: review
@@ -30,71 +28,10 @@ tags:
 - name: tag
   description: tag management
 paths:
-  /auth/authorize/{providerType}:
-    get:
+  /members/signup:
+    patch:
       tags:
-      - auth
-      summary: Redirect to provider's authorization server
-      operationId: authorize
-      parameters:
-      - name: providerType
-        in: path
-        description: OAuth Provider Type
-        required: true
-        style: simple
-        explode: false
-        schema:
-          $ref: '#/components/schemas/ProviderType'
-      responses:
-        "303":
-          description: Redirected.
-  /auth/login/{providerType}:
-    get:
-      tags:
-      - auth
-      summary: Login
-      operationId: login
-      parameters:
-      - name: providerType
-        in: path
-        description: OAuth Provider Type in String
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: code
-        in: query
-        description: Authorization Code
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-        example: 4%2F0AfgeXvvXBD61wINRwaPKfudciAi7fIjHiTL48VS_tWR06hFWseMJ7iErcrIyXkrWZ0zA5g
-      responses:
-        "200":
-          description: Login Succeded.
-        "204":
-          description: Unregistered User.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OAuthUserResponse'
-              examples:
-                UserRes_Example:
-                  value: null
-                  $ref: '#/components/examples/OAuthUserResponse_Example'
-        "401":
-          description: Unauthorized. Access token is missing or invalid.
-        "500":
-          description: Internal server error. Unexpected error.
-      x-http-servlet-request: true
-      x-http-servlet-response: true
-  /auth/signup:
-    post:
-      tags:
-      - auth
+      - member
       summary: Signup User
       operationId: signUp
       requestBody:
@@ -112,15 +49,13 @@ paths:
         "201":
           description: Created.
         "409":
-          description: Conflict. Already member.
+          description: Conflict. Already exists.
         "500":
           description: Internal server error. Unexpected error.
-      x-http-servlet-request: true
-      x-http-servlet-response: true
-  /users:
+  /members:
     get:
       tags:
-      - user
+      - member
       summary: Check if given username already exists
       operationId: checkUsernameDuplicated
       parameters:
@@ -142,19 +77,19 @@ paths:
           description: Internal server error. Unexpected error.
     patch:
       tags:
-      - user
-      summary: Update User Profile
-      operationId: updateUser
+      - member
+      summary: Update Member Profile
+      operationId: updateMember
       requestBody:
-        description: User Profile Update Form
+        description: Member Profile Update Form
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserUpdateRequest'
+              $ref: '#/components/schemas/MemberUpdateRequest'
             examples:
-              UserUpdateRequest_Example:
+              MemberUpdateRequest_Example:
                 value: null
-                $ref: '#/components/examples/UserUpdateRequest_Example'
+                $ref: '#/components/examples/MemberUpdateRequest_Example'
         required: true
       responses:
         "200":
@@ -162,32 +97,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/MemberResponse'
               examples:
-                UserRes_Example:
+                MemberRes_Example:
                   value: null
-                  $ref: '#/components/examples/UserResponse_Example'
+                  $ref: '#/components/examples/MemberResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
           description: Internal server error. Unexpected error.
-  /users/me:
+  /members/me:
     get:
       tags:
-      - user
-      summary: Get User Profile
-      operationId: getUser
+      - member
+      summary: Get Member Profile
+      operationId: getMember
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/MemberResponse'
               examples:
-                UserRes_Example:
+                MemberRes_Example:
                   value: null
-                  $ref: '#/components/examples/UserResponse_Example'
+                  $ref: '#/components/examples/MemberResponse_Example'
         "401":
           description: Unauthorized. Access token is missing or invalid.
         "500":
@@ -901,25 +836,18 @@ components:
       - $ref: '#/components/schemas/BasePage'
     MemberCreateRequest:
       required:
-      - email
-      - provider_type
       - username
       type: object
       properties:
-        email:
-          type: string
-          format: email
         username:
           type: string
         image_url:
           maxLength: 2097152
           type: string
-        provider_type:
-          $ref: '#/components/schemas/ProviderType'
         status_message:
           type: string
       description: User Signup Form
-    UserUpdateRequest:
+    MemberUpdateRequest:
       required:
       - username
       type: object
@@ -972,7 +900,7 @@ components:
         id:
           type: integer
           format: int64
-    UserResponse:
+    MemberResponse:
       required:
       - email
       - image_url
@@ -999,26 +927,6 @@ components:
       description: User Response
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
-    OAuthUserResponse:
-      required:
-      - email
-      - image_url
-      - provider_type
-      - role_type
-      - username
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-        username:
-          type: string
-        provider_type:
-          $ref: '#/components/schemas/ProviderType'
-        role_type:
-          $ref: '#/components/schemas/RoleType'
-        image_url:
-          type: string
     BeerResponse:
       required:
       - category
@@ -1299,13 +1207,6 @@ components:
       schema:
         type: integer
   examples:
-    OAuthUserResponse_Example:
-      value:
-        email: beer.lover@email.com
-        username: BeerLover
-        image_url: https://beerlot.com/profile_image_url
-        provider_type: GOOGLE
-        role_type: GENERAL
     BeerPage_Example:
       value:
         contents:
@@ -1346,12 +1247,10 @@ components:
         total_pages: 1
     MemberCreateRequest_Example:
       value:
-        email: beer.lover@email.com
         username: 비어러버
-        providerType: GOOGLE
         image_url: https://beerlot.com/profile_image_url
         statusMessage: Great day to drink beers
-    UserUpdateRequest_Example:
+    MemberUpdateRequest_Example:
       value:
         username: 퇴근후한캔
     ReviewCreateRequest_Example:
@@ -1362,7 +1261,7 @@ components:
       value:
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
-    UserResponse_Example:
+    MemberResponse_Example:
       value:
         id: 1
         email: beer.lover@email.com
