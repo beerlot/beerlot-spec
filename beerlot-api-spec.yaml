@@ -8,11 +8,9 @@ servers:
   description: SwaggerHub API Auto Mocking
 - url: https://beerlot-core-obtg3qwuhq-an.a.run.app/api/v1
   description: DEV
-security:
-- password:
-  - read
-  - write
 tags:
+- name: auth
+  description: auth management
 - name: member
   description: member management
 - name: beer
@@ -28,10 +26,66 @@ tags:
 - name: tag
   description: tag management
 paths:
-  /members/signup:
+  /auth/authorization/{provider}:
+    get:
+      tags:
+      - auth
+      summary: Social Login
+      operationId: login
+      parameters:
+      - name: provider
+        in: path
+        description: OAuth Provider Type
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/ProviderType'
+        example: google
+      - name: beerlot-oauth-redirect-url
+        in: query
+        description: redirect url to frontend
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: https://beerlot-front.com
+      responses:
+        "302":
+          description: Successfully redirected.
+        "400":
+          description: Invalid redirect url.
+        "401":
+          description: Unauthorized.
+        "500":
+          description: Internal server error. Unexpected error.
+  /auth/refresh:
     patch:
       tags:
-      - member
+      - auth
+      summary: Update refresh token
+      operationId: refreshToken
+      responses:
+        "200":
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenResponse'
+              examples:
+                AccessTokenResponse_Example:
+                  value: null
+                  $ref: '#/components/examples/AccessTokenResponse_Example'
+        "500":
+          description: Internal server error. Unexpected error.
+      x-http-servlet-request: true
+      x-http-servlet-response: true
+      x-authorization-bearer-token: true
+  /auth/signup:
+    patch:
+      tags:
+      - auth
       summary: Signup User
       operationId: signUp
       requestBody:
@@ -52,6 +106,8 @@ paths:
           description: Conflict. Already exists.
         "500":
           description: Internal server error. Unexpected error.
+      security:
+      - BearerAuth: []
   /members:
     get:
       tags:
@@ -900,6 +956,13 @@ components:
         id:
           type: integer
           format: int64
+    AccessTokenResponse:
+      required:
+      - access_token
+      type: object
+      properties:
+        access_token:
+          type: string
     MemberResponse:
       required:
       - email
@@ -1071,8 +1134,8 @@ components:
       schema:
         type: string
       example: 4%2F0AfgeXvvXBD61wINRwaPKfudciAi7fIjHiTL48VS_tWR06hFWseMJ7iErcrIyXkrWZ0zA5g
-    providerType:
-      name: providerType
+    provider:
+      name: provider
       in: path
       description: OAuth Provider Type
       required: true
@@ -1080,6 +1143,7 @@ components:
       explode: false
       schema:
         $ref: '#/components/schemas/ProviderType'
+      example: google
     userId:
       name: userId
       in: path
@@ -1351,6 +1415,9 @@ components:
         content: 이 맥주 진짜 맛있어요! 보일 때마다 사먹을거야
         rate: 5.0
         created_at: 2022-09-25T16:19:25Z
+    AccessTokenResponse_Example:
+      value:
+        access_token: eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiZWVybG90LXNlcnZlciIsImlhdCI6MTY3MTEyOTE1Niwic3ViIjoieW91amluLmxlZS5kZXZAZ21haWwuY29tIiwicm9sZXMiOlsiUk9MRV9HVUVTVCJdfQ.H3kMaI9aHMYWd-U9wo00bfb0MhNdmiQSfFy41uKunZyueKE2ksu0jVy7oYYOPKz3EfJPbUCt3ol6FxPNhk-EvA
     ReviewPage_Example:
       value:
         contents:
@@ -1371,11 +1438,7 @@ components:
         total_elements: 1
         total_pages: 1
   securitySchemes:
-    password:
-      type: oauth2
-      flows:
-        password:
-          tokenUrl: http://example.com/oauth/token
-          scopes:
-            write: allows modifying resources
-            read: allows reading resources
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
