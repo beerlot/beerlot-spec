@@ -183,13 +183,22 @@ paths:
           description: Unauthorized. Access token is missing or invalid.
         "500":
           description: Internal server error. Unexpected error.
-  /beers:
+  /{languageCode}/beers:
     get:
       tags:
       - beer
       summary: Get all beers with full search
       operationId: findBeersBySearch
       parameters:
+      - name: languageCode
+        in: path
+        description: Language Code
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/LanguageCode'
+        example: kr
       - name: keyword
         in: query
         description: Search keyword
@@ -277,12 +286,22 @@ paths:
         "500":
           description: Internal server error. Unexpected error.
       security: []
-  /beers/top:
+  /{languageCode}/beers/top:
     get:
       tags:
       - beer
       summary: Get Top 10 beers
       operationId: findTop10Beers
+      parameters:
+      - name: languageCode
+        in: path
+        description: Language Code
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/LanguageCode'
+        example: kr
       responses:
         "200":
           description: OK
@@ -328,13 +347,22 @@ paths:
                       rate: 4.25
         "500":
           description: Internal server error. Unexpected error.
-  /beers/{beerId}:
+  /{languageCode}/beers/{beerId}:
     get:
       tags:
       - beer
       summary: Get one beer
       operationId: findBeerById
       parameters:
+      - name: languageCode
+        in: path
+        description: Language Code
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/LanguageCode'
+        example: kr
       - name: beerId
         in: path
         description: beer id
@@ -807,6 +835,11 @@ paths:
       security: []
 components:
   schemas:
+    LanguageCode:
+      type: string
+      enum:
+      - KR
+      - EN
     ProviderType:
       type: string
       enum:
@@ -993,25 +1026,23 @@ components:
     BeerResponse:
       required:
       - category
-      - country
       - description
       - image_url
       - like_count
-      - name_en
-      - name_ko
+      - name
       - review_count
       - tags
       - volume
       type: object
       properties:
-        name_en:
-          type: string
-        name_ko:
+        name:
           type: string
         description:
           type: string
-        country:
-          $ref: '#/components/schemas/CountryResponse'
+        origin_country:
+          type: string
+        origin_city:
+          type: string
         volume:
           minimum: 0.0
           type: number
@@ -1039,22 +1070,14 @@ components:
         $ref: '#/components/examples/BeerResponse_Example'
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
-    CountryResponse:
-      type: object
-      properties:
-        code:
-          type: string
     CategorySupResponse:
       required:
       - description
-      - name_en
-      - name_ko
+      - name
       - parent
       type: object
       properties:
-        name_ko:
-          type: string
-        name_en:
+        name:
           type: string
         description:
           type: string
@@ -1124,6 +1147,16 @@ components:
     InternalServerError:
       description: Internal server error. Unexpected error.
   parameters:
+    languageCode:
+      name: languageCode
+      in: path
+      description: Language Code
+      required: true
+      style: simple
+      explode: false
+      schema:
+        $ref: '#/components/schemas/LanguageCode'
+      example: kr
     code:
       name: code
       in: query
